@@ -820,7 +820,7 @@ function buildNavbar(V) {
   return h('div', { class: 'navbar noprint' },
     h('div', { class: 'navbar-inner' },
       h('div', { class: 'brand' },
-        h('div', { class: 'brand-badge' }, '฿'),
+        h('img', { class: 'brand-logo', src: LOGO_DATA_URI, alt: 'YoungBoyInvestor' }),
         h('div', { class: 'brand-name' }, V.t.brand)
       ),
       h('div', { class: 'spacer' }),
@@ -1110,7 +1110,10 @@ function buildFooterSection(V) {
       h('div', { class: 'footer-text' }, V.t.footer),
       h('div', { class: 'footer-brand' }, V.t.brand + ' · THB')
     ),
-    h('div', { class: 'footer-credit' }, V.t.credit)
+    h('div', { class: 'footer-credit' },
+      h('img', { class: 'footer-logo', src: LOGO_DATA_URI, alt: 'YoungBoyInvestor' }),
+      h('div', {}, V.t.credit)
+    )
   );
 }
 function buildApp(V) {
