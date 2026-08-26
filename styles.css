@@ -236,6 +236,7 @@ td{padding:11.2px;font-size:13.5px;border-bottom:1px solid #2f323d;color:#9397ab
 .footer-inner{border-top:1px solid #2f323d;padding-top:22.4px;display:flex;justify-content:space-between;gap:22.4px;flex-wrap:wrap}
 .footer-text{max-width:640px;font-size:12px;line-height:1.7;color:#9397ab;font-weight:300}
 .footer-brand{font-size:12px;color:#595d6c}
+.footer-credit{margin-top:16.8px;font-size:12px;color:#595d6c;font-weight:500;letter-spacing:0.02em}
 
 /* ---------- note spacing overrides ---------- */
 .note-mb18{margin-bottom:18px}

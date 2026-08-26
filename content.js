@@ -21,6 +21,7 @@ const DICT = {
     faqTitle: 'คำถามที่พบบ่อย', faqSub: 'เรื่องที่คนเข้าใจผิดบ่อยที่สุดเกี่ยวกับดอกเบี้ย',
     glossaryTitle: 'คำศัพท์ที่ใช้ในหน้านี้',
     footer: 'การคำนวณทั้งหมดเกิดขึ้นในเบราว์เซอร์ของคุณ ไม่มีการส่งข้อมูลทางการเงินไปยังเซิร์ฟเวอร์ และไม่มีการจัดเก็บข้อมูลส่วนบุคคล ลิงก์แชร์เก็บค่าที่กรอกไว้ในตัว URL เท่านั้น ผลลัพธ์เป็นการประมาณการเพื่อการศึกษา ไม่ใช่คำแนะนำการลงทุนหรือการอนุมัติสินเชื่อ',
+    credit: 'ทำโดย YoungBoyInvestor · ห้ามลอกเลียนแบบเด็ดขาด',
     perMonth: 'ต่อเดือน', months: 'งวด', years: 'ปี', month: 'เดือน',
     byYear: 'ดูรายปี', byMonth: 'ดูทุกงวด',
     thPeriod: 'งวด', thYear: 'ปีที่', thWhen: 'ช่วงเวลา', thPay: 'ยอดชำระ', thPrin: 'เงินต้น', thInt: 'ดอกเบี้ย', thBal: 'คงเหลือ'
@@ -44,6 +45,7 @@ const DICT = {
     faqTitle: 'Frequently asked', faqSub: 'The things people most often get wrong about interest',
     glossaryTitle: 'Terms used on this page',
     footer: 'Every calculation runs in your browser. No financial data is sent to a server and nothing personal is stored. A share link carries your inputs inside the URL itself. Results are estimates for education, not investment advice or a credit approval.',
+    credit: 'Made by YoungBoyInvestor · Do not copy or clone',
     perMonth: 'per month', months: 'periods', years: 'years', month: 'months',
     byYear: 'By year', byMonth: 'Every period',
     thPeriod: 'Period', thYear: 'Year', thWhen: 'When', thPay: 'Payment', thPrin: 'Principal', thInt: 'Interest', thBal: 'Balance'

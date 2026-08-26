@@ -1109,7 +1109,8 @@ function buildFooterSection(V) {
     h('div', { class: 'footer-inner' },
       h('div', { class: 'footer-text' }, V.t.footer),
       h('div', { class: 'footer-brand' }, V.t.brand + ' · THB')
-    )
+    ),
+    h('div', { class: 'footer-credit' }, V.t.credit)
   );
 }
 function buildApp(V) {
