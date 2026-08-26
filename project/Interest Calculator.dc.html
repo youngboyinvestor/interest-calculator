@@ -1,0 +1,1469 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="crossorigin" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&amp;family=Noto+Sans+Thai:wght@300;400;500;600&amp;display=swap" rel="stylesheet" />
+<style>
+  *{box-sizing:border-box}
+  body{margin:0;background:#161826;color:#e9e9ed;font-family:'Inter','Noto Sans Thai',system-ui,sans-serif;font-weight:400;-webkit-font-smoothing:antialiased;text-wrap:pretty}
+  a{color:#d2cefd;text-decoration:none}
+  a:hover{color:#e7e5fe;text-decoration:underline}
+  input,select,button,textarea{font-family:inherit;font-size:inherit;color:inherit}
+  input[type=range]{accent-color:#9184d9}
+  input[type=checkbox]{accent-color:#9184d9}
+  select option{background:#232532;color:#e9e9ed}
+  :focus-visible{outline:2px solid #9184d9;outline-offset:2px}
+  ::selection{background:rgba(145,132,217,0.32)}
+  ::-webkit-scrollbar{width:10px;height:10px}
+  ::-webkit-scrollbar-thumb{background:#3f424d;border-radius:8px}
+  ::-webkit-scrollbar-track{background:transparent}
+  @media print{.noprint{display:none !important}}
+  @media (max-width:900px){.split{grid-template-columns:1fr !important}.sticky{position:static !important}}
+</style>
+</helmet>
+
+<div style="min-height:100vh;background:#161826;padding-bottom:56px">
+
+  <div class="noprint" style="position:sticky;top:0;z-index:40;background:rgba(22,24,38,0.9);backdrop-filter:blur(12px);border-bottom:1px solid #2f323d">
+    <div style="max-width:1220px;margin:0 auto;padding:11.2px 22.4px;display:flex;align-items:center;gap:16.8px">
+      <div style="display:flex;align-items:center;gap:8.4px">
+        <div style="width:24px;height:24px;border-radius:4px;border:1px solid #9184d9;display:flex;align-items:center;justify-content:center;color:#9184d9;font-size:13px;font-weight:500">฿</div>
+        <div style="font-weight:500;font-size:15px;letter-spacing:-0.01em">{{ t.brand }}</div>
+      </div>
+      <div style="flex:1"></div>
+      <div style="display:flex;gap:2.8px;border:1px solid #3f424d;border-radius:8px;padding:2.8px">
+        <sc-for list="{{ langOpts }}" as="o" hint-placeholder-count="2">
+          <button onClick="{{ o.onClick }}" style="padding:5.6px 11.2px;border:none;border-radius:4px;background:{{ o.bg }};color:{{ o.fg }};font-size:12.5px;font-weight:500;cursor:pointer;white-space:nowrap">{{ o.label }}</button>
+        </sc-for>
+      </div>
+      <button onClick="{{ onShare }}" style="padding:8.4px 14px;border:1px solid #9184d9;background:transparent;color:#d2cefd;border-radius:8px;font-size:13px;cursor:pointer;white-space:nowrap" style-hover="background:rgba(145,132,217,0.12)">{{ shareLabel }}</button>
+      <button onClick="{{ onPrint }}" style="padding:8.4px 14px;border:1px solid #3f424d;background:transparent;color:#b2b6ca;border-radius:8px;font-size:13px;cursor:pointer;white-space:nowrap" style-hover="background:rgba(145,132,217,0.08);border-color:#5d5294">{{ t.print }}</button>
+    </div>
+  </div>
+
+  <div style="max-width:1220px;margin:0 auto;padding:78px 22.4px 0">
+    <div style="max-width:720px">
+      <div style="font-size:11.5px;letter-spacing:0.16em;text-transform:uppercase;color:#9184d9;font-weight:500;margin-bottom:22.4px">{{ t.kicker }}</div>
+      <h1 style="margin:0;font-size:46px;line-height:1.12;font-weight:500;letter-spacing:-0.025em;color:#f3f5fe">{{ t.heroTitle }}</h1>
+      <p style="margin:22.4px 0 0;font-size:18px;line-height:1.6;color:#9397ab;max-width:600px;font-weight:300">{{ t.heroSub }}</p>
+      <div style="display:flex;gap:8.4px;margin-top:33.6px;flex-wrap:wrap">
+        <button onClick="{{ goCalc }}" style="padding:12px 22.4px;border:1px solid #9184d9;border-radius:8px;background:transparent;color:#d2cefd;font-size:14.5px;font-weight:500;cursor:pointer;white-space:nowrap" style-hover="background:rgba(145,132,217,0.14)">{{ t.ctaStart }}</button>
+        <button onClick="{{ goFaq }}" style="padding:12px 22.4px;border:1px solid #3f424d;border-radius:8px;background:transparent;color:#b2b6ca;font-size:14.5px;cursor:pointer;white-space:nowrap" style-hover="border-color:#5d5294;color:#e9e9ed">{{ t.ctaFaq }}</button>
+      </div>
+    </div>
+  </div>
+
+  <div style="max-width:1220px;margin:0 auto;padding:56px 22.4px 0">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(196px,1fr));gap:11.2px">
+      <sc-for list="{{ cats }}" as="c" hint-placeholder-count="5">
+        <button onClick="{{ c.onClick }}" style="text-align:left;padding:16.8px;border:1px solid {{ c.border }};background:{{ c.bg }};border-radius:8px;cursor:pointer;display:grid;gap:8.4px;box-shadow:0 0 0 1px transparent" style-hover="border-color:#9184d9">
+          <div style="font-size:11.5px;letter-spacing:0.14em;text-transform:uppercase;color:#9397ab;font-weight:500">{{ c.tag }}</div>
+          <div style="font-size:15px;font-weight:500;color:#f3f5fe">{{ c.label }}</div>
+          <div style="font-size:12.5px;color:#9397ab;line-height:1.5;font-weight:300">{{ c.note }}</div>
+        </button>
+      </sc-for>
+    </div>
+  </div>
+
+  <div id="calc" style="max-width:1220px;margin:0 auto;padding:67px 22.4px 0">
+    <div class="split" style="display:grid;grid-template-columns:minmax(300px,368px) 1fr;gap:22.4px;align-items:start">
+
+      <div class="sticky" style="display:grid;gap:11.2px;position:sticky;top:72px">
+        <div style="background:#232532;border-radius:14px;padding:22.4px;box-shadow:0 0 0 1px #3f424d">
+          <div style="font-size:16px;font-weight:500;color:#f3f5fe">{{ panelTitle }}</div>
+          <div style="font-size:12.5px;color:#9397ab;line-height:1.5;margin-top:5.6px;margin-bottom:22.4px;font-weight:300">{{ panelNote }}</div>
+
+          <div style="display:grid;gap:16.8px">
+            <sc-for list="{{ fields }}" as="f" hint-placeholder-count="6">
+              <div style="display:grid;gap:5.6px">
+                <div style="display:flex;justify-content:space-between;align-items:baseline;gap:8.4px">
+                  <label style="font-size:13px;font-weight:500;color:#cfd3e5">{{ f.label }}</label>
+                  <span style="font-size:11.5px;color:#9397ab">{{ f.unit }}</span>
+                </div>
+                <sc-if value="{{ f.isSeg }}" hint-placeholder-val="{{ false }}">
+                  <div style="display:flex;gap:2.8px;background:#1c1e2b;padding:2.8px;border-radius:8px;box-shadow:0 0 0 1px #3f424d">
+                    <sc-for list="{{ f.options }}" as="o" hint-placeholder-count="2">
+                      <button onClick="{{ o.onClick }}" style="flex:1;padding:8px 5.6px;border:none;border-radius:4px;background:{{ o.bg }};color:{{ o.fg }};font-size:12.5px;font-weight:500;cursor:pointer;white-space:nowrap">{{ o.label }}</button>
+                    </sc-for>
+                  </div>
+                </sc-if>
+                <sc-if value="{{ f.isSelect }}" hint-placeholder-val="{{ false }}">
+                  <select value="{{ f.value }}" onChange="{{ f.onChange }}" style="width:100%;padding:10px 11.2px;border:1px solid #3f424d;border-radius:8px;background:#1c1e2b;font-size:14.5px">
+                    <sc-for list="{{ f.options }}" as="o" hint-placeholder-count="4">
+                      <option value="{{ o.value }}">{{ o.label }}</option>
+                    </sc-for>
+                  </select>
+                </sc-if>
+                <sc-if value="{{ f.isNumber }}" hint-placeholder-val="{{ true }}">
+                  <input type="text" inputMode="decimal" value="{{ f.display }}" onChange="{{ f.onChange }}" onBlur="{{ f.onBlur }}" style="width:100%;padding:10px 11.2px;border:1px solid {{ f.border }};border-radius:8px;background:#1c1e2b;font-size:15.5px;font-variant-numeric:tabular-nums;letter-spacing:-0.01em" />
+                </sc-if>
+                <sc-if value="{{ f.error }}" hint-placeholder-val="{{ false }}">
+                  <div style="font-size:12px;color:#d98484;line-height:1.45">{{ f.error }}</div>
+                </sc-if>
+                <sc-if value="{{ f.hint }}" hint-placeholder-val="{{ false }}">
+                  <div style="font-size:12px;color:#9397ab;line-height:1.5;font-weight:300">{{ f.hint }}</div>
+                </sc-if>
+              </div>
+            </sc-for>
+          </div>
+
+          <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+            <div style="margin-top:22.4px;padding-top:16.8px;border-top:1px solid #2f323d;display:grid;gap:14px">
+              <label style="display:flex;align-items:center;gap:8.4px;cursor:pointer;font-size:13px;font-weight:500;color:#cfd3e5">
+                <input type="checkbox" checked="{{ stepup }}" onChange="{{ toggleStepup }}" style="width:15px;height:15px" />
+                {{ t.stepupLabel }}
+              </label>
+              <sc-if value="{{ stepup }}" hint-placeholder-val="{{ false }}">
+                <div style="display:grid;gap:8.4px">
+                  <sc-for list="{{ stepFields }}" as="s" hint-placeholder-count="4">
+                    <div style="display:flex;align-items:center;gap:8.4px">
+                      <div style="flex:1;font-size:12.5px;color:#9397ab">{{ s.label }}</div>
+                      <input type="text" inputMode="decimal" value="{{ s.display }}" onChange="{{ s.onChange }}" style="width:80px;padding:7px 9px;border:1px solid #3f424d;border-radius:4px;background:#1c1e2b;text-align:right;font-size:14px;font-variant-numeric:tabular-nums" />
+                      <div style="font-size:12.5px;color:#9397ab;width:12px">%</div>
+                    </div>
+                  </sc-for>
+                </div>
+              </sc-if>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ hasExtraPanel }}" hint-placeholder-val="{{ true }}">
+            <div style="margin-top:22.4px;padding-top:16.8px;border-top:1px solid #2f323d">
+              <div style="font-size:13px;font-weight:500;color:#cfd3e5;margin-bottom:11.2px">{{ t.extraTitle }}</div>
+              <div style="display:flex;gap:2.8px;background:#1c1e2b;padding:2.8px;border-radius:8px;margin-bottom:14px;box-shadow:0 0 0 1px #3f424d">
+                <sc-for list="{{ extraModes }}" as="o" hint-placeholder-count="4">
+                  <button onClick="{{ o.onClick }}" style="flex:1;padding:8px 2.8px;border:none;border-radius:4px;background:{{ o.bg }};color:{{ o.fg }};font-size:11.5px;font-weight:500;cursor:pointer;white-space:nowrap">{{ o.label }}</button>
+                </sc-for>
+              </div>
+              <sc-if value="{{ showExtraAmt }}" hint-placeholder-val="{{ false }}">
+                <div style="display:grid;gap:8.4px">
+                  <div style="display:flex;justify-content:space-between;align-items:baseline">
+                    <label style="font-size:12.5px;color:#9397ab">{{ extraAmtLabel }}</label>
+                    <div style="font-size:14.5px;font-weight:500;font-variant-numeric:tabular-nums;color:#d2cefd">{{ extraAmtText }}</div>
+                  </div>
+                  <input type="range" min="0" max="{{ extraSliderMax }}" step="{{ extraSliderStep }}" value="{{ extraSliderVal }}" onChange="{{ onExtraSlider }}" style="width:100%" />
+                </div>
+              </sc-if>
+              <sc-if value="{{ showLumpMonth }}" hint-placeholder-val="{{ false }}">
+                <div style="display:flex;align-items:center;gap:8.4px;margin-top:11.2px">
+                  <div style="flex:1;font-size:12.5px;color:#9397ab">{{ t.lumpAt }}</div>
+                  <input type="text" inputMode="decimal" value="{{ lumpMonthVal }}" onChange="{{ onLumpMonth }}" style="width:80px;padding:7px 9px;border:1px solid #3f424d;border-radius:4px;background:#1c1e2b;text-align:right;font-size:14px" />
+                </div>
+              </sc-if>
+            </div>
+          </sc-if>
+
+          <button onClick="{{ onReset }}" class="noprint" style="margin-top:22.4px;width:100%;padding:10px;border:1px solid #3f424d;background:transparent;border-radius:8px;font-size:13px;color:#9397ab;cursor:pointer" style-hover="border-color:#5d5294;color:#b2b6ca">{{ t.reset }}</button>
+        </div>
+
+        <sc-if value="{{ isAuto }}" hint-placeholder-val="{{ false }}">
+          <div style="background:#1c1e2b;border-radius:14px;padding:16.8px;box-shadow:0 0 0 1px #3f424d">
+            <div style="font-size:13.5px;font-weight:500;color:#f3f5fe;margin-bottom:8.4px">{{ t.flatBoxTitle }}</div>
+            <div style="font-size:12.5px;line-height:1.65;color:#9397ab;font-weight:300">{{ flatBoxBody }}</div>
+          </div>
+        </sc-if>
+      </div>
+
+      <div style="display:grid;grid-template-columns:minmax(0,1fr);gap:16.8px;min-width:0">
+
+        <sc-if value="{{ hasErrors }}" hint-placeholder-val="{{ false }}">
+          <div style="background:rgba(217,132,132,0.08);border-radius:14px;padding:22.4px;box-shadow:0 0 0 1px rgba(217,132,132,0.4)">
+            <div style="font-size:15px;font-weight:500;color:#d98484;margin-bottom:8.4px">{{ t.errTitle }}</div>
+            <div style="display:grid;gap:4px">
+              <sc-for list="{{ errors }}" as="e" hint-placeholder-count="1">
+                <div style="font-size:13.5px;color:#cfd3e5;line-height:1.5;font-weight:300">{{ e }}</div>
+              </sc-for>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ ok }}" hint-placeholder-val="{{ true }}">
+        <div style="display:grid;grid-template-columns:minmax(0,1fr);gap:16.8px;min-width:0">
+
+          <div style="display:flex;align-items:baseline;gap:11.2px;flex-wrap:wrap">
+            <div style="font-size:22px;font-weight:500;letter-spacing:-0.02em;color:#f3f5fe">{{ t.resultTitle }}</div>
+            <div style="font-size:13px;color:#9397ab;font-weight:300">{{ resultCaption }}</div>
+          </div>
+
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(168px,1fr));gap:11.2px">
+            <sc-for list="{{ bigCards }}" as="k" hint-placeholder-count="4">
+              <div style="background:#232532;border-radius:14px;padding:18px;display:grid;gap:5.6px;box-shadow:0 0 0 1px #3f424d">
+                <div style="font-size:12px;color:#9397ab;font-weight:500">{{ k.label }}</div>
+                <div style="font-size:25px;font-weight:500;letter-spacing:-0.03em;font-variant-numeric:tabular-nums;color:{{ k.color }};line-height:1.15">{{ k.value }}</div>
+                <div style="font-size:12px;color:#9397ab;font-weight:300">{{ k.sub }}</div>
+              </div>
+            </sc-for>
+          </div>
+
+          <div style="background:#1c1e2b;border-radius:14px;padding:25px 26px;box-shadow:0 0 0 1px #3f424d">
+            <div style="font-size:11.5px;letter-spacing:0.14em;text-transform:uppercase;color:#9184d9;font-weight:500;margin-bottom:11.2px">{{ t.meaning }}</div>
+            <div style="font-size:17px;line-height:1.7;font-weight:300;color:#e9e9ed">{{ narrative }}</div>
+            <div style="font-size:12px;line-height:1.6;color:#9397ab;margin-top:16.8px;font-weight:300">{{ t.disclaimer }}</div>
+          </div>
+
+          <sc-if value="{{ hasBreakdown }}" hint-placeholder-val="{{ true }}">
+            <div style="background:#232532;border-radius:14px;padding:22.4px;box-shadow:0 0 0 1px #3f424d">
+              <div style="font-size:15px;font-weight:500;color:#f3f5fe;margin-bottom:16.8px">{{ breakdownTitle }}</div>
+              <div style="display:flex;height:34px;border-radius:4px;overflow:hidden;background:#1c1e2b">
+                <div style="width:{{ pctA }}%;background:#b2b6ca;display:flex;align-items:center;padding-left:11.2px;color:#161826;font-size:12.5px;font-weight:500;white-space:nowrap;overflow:hidden">{{ pctAText }}</div>
+                <div style="width:{{ pctB }}%;background:#9184d9;display:flex;align-items:center;padding-left:11.2px;color:#161826;font-size:12.5px;font-weight:500;white-space:nowrap;overflow:hidden">{{ pctBText }}</div>
+                <div style="width:{{ pctC }}%;background:#595d6c"></div>
+              </div>
+              <div style="display:flex;gap:22.4px;margin-top:16.8px;flex-wrap:wrap">
+                <sc-for list="{{ legend }}" as="l" hint-placeholder-count="3">
+                  <div style="display:flex;align-items:center;gap:7px">
+                    <div style="width:9px;height:9px;border-radius:2px;background:{{ l.color }}"></div>
+                    <div style="font-size:12.5px;color:#9397ab;white-space:nowrap">{{ l.label }}</div>
+                    <div style="font-size:13px;font-weight:500;font-variant-numeric:tabular-nums;color:#e9e9ed;white-space:nowrap">{{ l.value }}</div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ hasCharts }}" hint-placeholder-val="{{ true }}">
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16.8px">
+              <div style="background:#232532;border-radius:14px;padding:22.4px;box-shadow:0 0 0 1px #3f424d">
+                <div style="font-size:15px;font-weight:500;color:#f3f5fe">{{ curveTitle }}</div>
+                <div style="font-size:12px;color:#9397ab;margin-top:4px;margin-bottom:16.8px;font-weight:300">{{ curveNote }}</div>
+                <svg viewBox="0 0 620 180" preserveAspectRatio="none" style="width:100%;height:180px;display:block" data-om-raster="true">
+                  <path d="{{ curveArea }}" fill="rgba(145,132,217,0.14)"></path>
+                  <polyline points="{{ curvePoints }}" fill="none" stroke="#9184d9" stroke-width="2" stroke-linejoin="round"></polyline>
+                  <line x1="0" y1="164" x2="620" y2="164" stroke="#3f424d" stroke-width="1"></line>
+                </svg>
+                <div style="display:flex;justify-content:space-between;margin-top:8.4px">
+                  <sc-for list="{{ curveTicks }}" as="x" hint-placeholder-count="5">
+                    <div style="font-size:11.5px;color:#9397ab;font-variant-numeric:tabular-nums">{{ x }}</div>
+                  </sc-for>
+                </div>
+                <div style="display:grid;gap:5.6px;margin-top:14px;padding-top:14px;border-top:1px solid #2f323d">
+                  <sc-for list="{{ curveMarks }}" as="m" hint-placeholder-count="4">
+                    <div style="display:flex;justify-content:space-between;gap:11.2px;font-size:12.5px">
+                      <div style="color:#9397ab;white-space:nowrap">{{ m.label }}</div>
+                      <div style="font-weight:500;font-variant-numeric:tabular-nums;color:#e9e9ed;white-space:nowrap">{{ m.value }}</div>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+
+              <div style="background:#232532;border-radius:14px;padding:22.4px;box-shadow:0 0 0 1px #3f424d">
+                <div style="font-size:15px;font-weight:500;color:#f3f5fe">{{ barsTitle }}</div>
+                <div style="font-size:12px;color:#9397ab;margin-top:4px;margin-bottom:16.8px;font-weight:300">{{ barsNote }}</div>
+                <div style="display:flex;align-items:flex-end;gap:2px;height:180px">
+                  <sc-for list="{{ yearBars }}" as="b" hint-placeholder-count="15">
+                    <div title="{{ b.title }}" style="flex:1;display:flex;flex-direction:column;justify-content:flex-end;height:100%;gap:1px;min-width:2px">
+                      <div style="height:{{ b.bH }}%;background:#9184d9;border-radius:2px 2px 0 0"></div>
+                      <div style="height:{{ b.aH }}%;background:#b2b6ca;border-radius:0 0 2px 2px"></div>
+                    </div>
+                  </sc-for>
+                </div>
+                <div style="display:flex;justify-content:space-between;margin-top:8.4px;font-size:11.5px;color:#9397ab">
+                  <div>{{ barsFirst }}</div>
+                  <div>{{ barsLast }}</div>
+                </div>
+              </div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ hasExtraCompare }}" hint-placeholder-val="{{ true }}">
+            <div style="background:#232532;border-radius:14px;padding:22.4px;box-shadow:0 0 0 1px #3f424d">
+              <div style="font-size:15px;font-weight:500;color:#f3f5fe">{{ t.extraCompareTitle }}</div>
+              <div style="font-size:12px;color:#9397ab;margin-top:4px;margin-bottom:18px;font-weight:300">{{ t.extraCompareNote }}</div>
+              <div style="display:grid;gap:14px">
+                <sc-for list="{{ extraRows }}" as="r" hint-placeholder-count="4">
+                  <div style="display:grid;gap:5.6px">
+                    <div style="display:flex;justify-content:space-between;align-items:baseline;gap:11.2px;flex-wrap:wrap">
+                      <div style="font-size:13.5px;font-weight:500;color:#e9e9ed;white-space:nowrap">{{ r.label }}</div>
+                      <div style="font-size:12.5px;color:#9397ab;font-variant-numeric:tabular-nums;font-weight:300">{{ r.detail }}</div>
+                    </div>
+                    <div style="display:flex;height:22px;border-radius:4px;overflow:hidden;background:#1c1e2b">
+                      <div style="width:{{ r.pW }}%;background:#b2b6ca"></div>
+                      <div style="width:{{ r.iW }}%;background:#9184d9"></div>
+                    </div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ hasWhatIf }}" hint-placeholder-val="{{ true }}">
+            <div style="background:#232532;border-radius:14px;padding:22.4px;box-shadow:0 0 0 1px #3f424d">
+              <div style="font-size:15px;font-weight:500;color:#f3f5fe">{{ t.whatIfTitle }}</div>
+              <div style="font-size:12px;color:#9397ab;margin-top:4px;margin-bottom:16.8px;font-weight:300">{{ whatIfNote }}</div>
+              <input type="range" min="0" max="60" step="1" value="{{ downPctVal }}" onChange="{{ onDownSlider }}" style="width:100%" />
+              <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(148px,1fr));gap:11.2px;margin-top:18px">
+                <sc-for list="{{ whatIfRows }}" as="w" hint-placeholder-count="4">
+                  <div style="background:#1c1e2b;border-radius:8px;padding:14px;display:grid;gap:4px">
+                    <div style="font-size:12px;color:#9397ab">{{ w.label }}</div>
+                    <div style="font-size:18px;font-weight:500;font-variant-numeric:tabular-nums;color:#f3f5fe">{{ w.value }}</div>
+                    <div style="font-size:12px;color:{{ w.color }};font-weight:500">{{ w.delta }}</div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ hasTable2 }}" hint-placeholder-val="{{ false }}">
+            <div style="background:#232532;border-radius:14px;padding:22.4px;box-shadow:0 0 0 1px #3f424d">
+              <div style="font-size:15px;font-weight:500;color:#f3f5fe">{{ table2Title }}</div>
+              <sc-if value="{{ table2Verdict }}" hint-placeholder-val="{{ false }}">
+                <div style="font-size:19px;font-weight:500;color:{{ table2VerdictColor }};margin-top:8.4px">{{ table2Verdict }}</div>
+              </sc-if>
+              <div style="overflow-x:auto;margin-top:18px">
+                <table style="width:100%;border-collapse:collapse;min-width:460px">
+                  <thead>
+                    <tr>
+                      <sc-for list="{{ table2Heads }}" as="h" hint-placeholder-count="3">
+                        <th style="text-align:{{ h.align }};padding:8.4px 11.2px;font-size:11.5px;color:#9397ab;font-weight:500;border-bottom:1px solid #3f424d;letter-spacing:0.04em;text-transform:uppercase">{{ h.label }}</th>
+                      </sc-for>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <sc-for list="{{ table2Rows }}" as="r" hint-placeholder-count="5">
+                      <tr>
+                        <td style="padding:11.2px;font-size:13.5px;border-bottom:1px solid #2f323d;color:#9397ab">{{ r.label }}</td>
+                        <sc-for list="{{ r.cells }}" as="c" hint-placeholder-count="2">
+                          <td style="padding:11.2px;font-size:14px;text-align:right;font-variant-numeric:tabular-nums;border-bottom:1px solid #2f323d;font-weight:{{ c.weight }};color:{{ c.color }}">{{ c.text }}</td>
+                        </sc-for>
+                      </tr>
+                    </sc-for>
+                  </tbody>
+                </table>
+              </div>
+              <sc-if value="{{ table2Foot }}" hint-placeholder-val="{{ false }}">
+                <div style="font-size:12.5px;color:#9397ab;line-height:1.6;margin-top:16.8px;font-weight:300">{{ table2Foot }}</div>
+              </sc-if>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ hasAmort }}" hint-placeholder-val="{{ true }}">
+            <div style="background:#232532;border-radius:14px;padding:22.4px;box-shadow:0 0 0 1px #3f424d">
+              <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:14px;flex-wrap:wrap;margin-bottom:16.8px">
+                <div>
+                  <div style="font-size:15px;font-weight:500;color:#f3f5fe">{{ amortTitle }}</div>
+                  <div style="font-size:12px;color:#9397ab;margin-top:4px;font-weight:300">{{ amortNote }}</div>
+                </div>
+                <div class="noprint" style="display:flex;gap:5.6px;flex-wrap:wrap">
+                  <button onClick="{{ onToggleAmortView }}" style="padding:7px 12px;border:1px solid #3f424d;background:transparent;color:#b2b6ca;border-radius:8px;font-size:12.5px;cursor:pointer" style-hover="border-color:#5d5294;color:#e9e9ed">{{ amortViewLabel }}</button>
+                  <button onClick="{{ onCsv }}" style="padding:7px 12px;border:1px solid #3f424d;background:transparent;color:#b2b6ca;border-radius:8px;font-size:12.5px;cursor:pointer" style-hover="border-color:#5d5294;color:#e9e9ed">CSV</button>
+                </div>
+              </div>
+              <div style="overflow-x:auto;max-height:500px;overflow-y:auto">
+                <table style="width:100%;border-collapse:collapse;min-width:620px">
+                  <thead>
+                    <tr>
+                      <sc-for list="{{ amortHeads }}" as="h" hint-placeholder-count="6">
+                        <th style="text-align:{{ h.align }};padding:8.4px 11.2px;font-size:11.5px;color:#9397ab;font-weight:500;border-bottom:1px solid #3f424d;background:#232532;position:sticky;top:0;letter-spacing:0.04em;text-transform:uppercase;white-space:nowrap">{{ h.label }}</th>
+                      </sc-for>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <sc-for list="{{ amortRows }}" as="r" hint-placeholder-count="14">
+                      <tr>
+                        <td style="padding:9px 11.2px;font-size:13px;border-bottom:1px solid #2f323d;color:#cfd3e5;font-weight:{{ r.weight }}">{{ r.n }}</td>
+                        <td style="padding:9px 11.2px;font-size:12.5px;border-bottom:1px solid #2f323d;color:#9397ab">{{ r.date }}</td>
+                        <td style="padding:9px 11.2px;font-size:13px;text-align:right;font-variant-numeric:tabular-nums;border-bottom:1px solid #2f323d;color:#e9e9ed">{{ r.pay }}</td>
+                        <td style="padding:9px 11.2px;font-size:13px;text-align:right;font-variant-numeric:tabular-nums;border-bottom:1px solid #2f323d;color:#b2b6ca">{{ r.principal }}</td>
+                        <td style="padding:9px 11.2px;font-size:13px;text-align:right;font-variant-numeric:tabular-nums;border-bottom:1px solid #2f323d;color:#b5abfc">{{ r.interest }}</td>
+                        <td style="padding:9px 11.2px;font-size:13px;text-align:right;font-variant-numeric:tabular-nums;border-bottom:1px solid #2f323d;color:#e9e9ed;font-weight:500">{{ r.balance }}</td>
+                      </tr>
+                    </sc-for>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </sc-if>
+
+        </div>
+        </sc-if>
+      </div>
+    </div>
+  </div>
+
+  <sc-if value="{{ showTestPanel }}" hint-placeholder-val="{{ true }}">
+    <div style="max-width:1220px;margin:0 auto;padding:56px 22.4px 0">
+      <div style="background:#1c1e2b;border-radius:14px;padding:22.4px;box-shadow:0 0 0 1px #3f424d">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap">
+          <div>
+            <div style="font-size:14.5px;font-weight:500;color:#f3f5fe">{{ t.testsTitle }}</div>
+            <div style="font-size:12.5px;color:#9397ab;margin-top:3px;font-weight:300">{{ testSummary }}</div>
+          </div>
+          <button onClick="{{ onToggleTests }}" class="noprint" style="padding:7px 12px;border:1px solid #3f424d;background:transparent;color:#b2b6ca;border-radius:8px;font-size:12.5px;cursor:pointer" style-hover="border-color:#5d5294;color:#e9e9ed">{{ testToggleLabel }}</button>
+        </div>
+        <sc-if value="{{ showTests }}" hint-placeholder-val="{{ false }}">
+          <div style="display:grid;gap:0;margin-top:16.8px">
+            <sc-for list="{{ testRows }}" as="x" hint-placeholder-count="12">
+              <div style="display:flex;gap:11.2px;align-items:baseline;padding:8.4px 0;border-bottom:1px solid #2f323d">
+                <div style="font-size:11.5px;font-weight:500;color:{{ x.color }};width:40px">{{ x.mark }}</div>
+                <div style="flex:1;font-size:13px;color:#cfd3e5;font-weight:300">{{ x.name }}</div>
+                <div style="font-size:12px;color:#9397ab;font-variant-numeric:tabular-nums">{{ x.detail }}</div>
+              </div>
+            </sc-for>
+          </div>
+        </sc-if>
+      </div>
+    </div>
+  </sc-if>
+
+  <div id="faq" style="max-width:1220px;margin:0 auto;padding:78px 22.4px 0">
+    <div style="font-size:28px;font-weight:500;letter-spacing:-0.02em;color:#f3f5fe">{{ t.faqTitle }}</div>
+    <div style="font-size:14.5px;color:#9397ab;margin-top:8.4px;margin-bottom:28px;font-weight:300">{{ t.faqSub }}</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(330px,1fr));gap:11.2px">
+      <sc-for list="{{ faqs }}" as="q" hint-placeholder-count="8">
+        <div style="background:#232532;border-radius:14px;padding:20px;box-shadow:0 0 0 1px #3f424d">
+          <div style="font-size:14.5px;font-weight:500;margin-bottom:8.4px;color:#f3f5fe">{{ q.q }}</div>
+          <div style="font-size:13.5px;line-height:1.7;color:#9397ab;font-weight:300">{{ q.a }}</div>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+
+  <div style="max-width:1220px;margin:0 auto;padding:56px 22.4px 0">
+    <div style="font-size:11.5px;letter-spacing:0.14em;text-transform:uppercase;color:#9397ab;font-weight:500;margin-bottom:16.8px">{{ t.glossaryTitle }}</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:22.4px">
+      <sc-for list="{{ glossary }}" as="g" hint-placeholder-count="6">
+        <div style="display:grid;gap:5.6px">
+          <div style="font-size:13.5px;font-weight:500;color:#e9e9ed">{{ g.term }}</div>
+          <div style="font-size:12.5px;line-height:1.65;color:#9397ab;font-weight:300">{{ g.def }}</div>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+
+  <div style="max-width:1220px;margin:0 auto;padding:56px 22.4px 0">
+    <div style="border-top:1px solid #2f323d;padding-top:22.4px;display:flex;justify-content:space-between;gap:22.4px;flex-wrap:wrap">
+      <div style="max-width:640px;font-size:12px;line-height:1.7;color:#9397ab;font-weight:300">{{ t.footer }}</div>
+      <div style="font-size:12px;color:#595d6c">{{ t.brand }} · THB</div>
+    </div>
+  </div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;language&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;th&quot;,&quot;en&quot;],&quot;default&quot;:&quot;th&quot;,&quot;tsType&quot;:&quot;'th' | 'en'&quot;,&quot;section&quot;:&quot;Content&quot;},&quot;defaultTab&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;home&quot;,&quot;auto&quot;,&quot;comp&quot;,&quot;refi&quot;,&quot;afford&quot;],&quot;default&quot;:&quot;home&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Content&quot;},&quot;showEngineTests&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Content&quot;}}">
+/* =========================================================================
+   CALCULATION ENGINE — pure functions. No React, no DOM, no formatting.
+   Kept as a static namespace so it can be lifted into its own module
+   (calc/engine.js) and reused by a mobile app or an API unchanged.
+   ========================================================================= */
+const ENGINE = {
+  /* Reducing-balance payment. r = periodic rate. Handles r = 0. */
+  pmt(P, r, n) {
+    if (n <= 0) return 0;
+    if (!r) return P / n;
+    const g = Math.pow(1 + r, n);
+    return P * r * g / (g - 1);
+  },
+  /* Inverse of pmt: largest principal a given payment can service. */
+  maxPrincipal(pay, r, n) {
+    if (n <= 0) return 0;
+    if (!r) return pay * n;
+    const g = Math.pow(1 + r, n);
+    return pay * (g - 1) / (r * g);
+  },
+  /* sched = [{months, annual}] in order; last entry extends to the end. */
+  rateAt(sched, m) {
+    let acc = 0;
+    for (const s of sched) { acc += s.months; if (m <= acc) return s.annual; }
+    return sched[sched.length - 1].annual;
+  },
+  /* Reducing-balance amortisation.
+     Full float precision internally; the final period is trued up so the
+     balance lands on exactly 0 and principal sums to the original loan. */
+  amortize(o) {
+    const months = Math.max(1, Math.round(o.months));
+    const extraMonthly = o.extraMonthly || 0;
+    const extraAnnual = o.extraAnnual || 0;
+    const lump = o.lump || 0, lumpMonth = o.lumpMonth || 0;
+    let bal = o.principal, totI = 0, totP = 0, pay = 0, curR = null;
+    const rows = [];
+    for (let m = 1; m <= months && bal > 0.005; m++) {
+      const r = this.rateAt(o.sched, m) / 100 / 12;
+      if (curR === null || Math.abs(r - curR) > 1e-15) {
+        curR = r; pay = this.pmt(bal, r, months - m + 1);
+      }
+      const interest = bal * r;
+      let princ = pay - interest + extraMonthly;
+      if (extraAnnual && m % 12 === 0) princ += extraAnnual;
+      if (lump && m === lumpMonth) princ += lump;
+      if (princ > bal) princ = bal;
+      bal -= princ; totI += interest; totP += princ;
+      rows.push({ m, interest, principal: princ, payment: princ + interest, balance: bal < 0.005 ? 0 : bal });
+    }
+    return {
+      rows, months: rows.length, scheduledMonths: months,
+      totalInterest: totI, totalPrincipal: totP, totalPayment: totI + totP,
+      basePayment: this.pmt(o.principal, this.rateAt(o.sched, 1) / 100 / 12, months)
+    };
+  },
+  /* FLAT / ADD-ON RATE — a different product, deliberately a different
+     function: interest is charged on the ORIGINAL principal for the whole
+     term and never falls as the balance falls. */
+  flat(P, flatPct, months, balloon) {
+    const b = balloon || 0;
+    const totI = P * (flatPct / 100) * (months / 12);
+    const pay = (P + totI - b) / months;
+    const perI = totI / months;
+    const rows = [];
+    let bal = P;
+    for (let m = 1; m <= months; m++) {
+      let princ = m === months ? bal : pay - perI;
+      bal -= princ;
+      rows.push({ m, interest: perI, principal: princ, payment: m === months ? princ + perI + b : pay, balance: bal < 0.005 ? 0 : bal });
+    }
+    const eff = this.solveRate(P, pay, months, b);
+    return { rows, months, payment: pay, totalPrincipal: P, totalInterest: totI, totalPayment: P + totI, effAnnual: eff * 12 * 100 };
+  },
+  /* Bisection for the periodic rate that discounts the payment stream to P. */
+  solveRate(P, pay, n, balloon) {
+    const b = balloon || 0;
+    const pv = r => { if (!r) return pay * n + b; const g = Math.pow(1 + r, n); return pay * (g - 1) / (r * g) + b / g; };
+    let lo = 0, hi = 1;
+    for (let i = 0; i < 200; i++) { const mid = (lo + hi) / 2; if (pv(mid) > P) lo = mid; else hi = mid; }
+    return (lo + hi) / 2;
+  },
+  simple(P, annualPct, years) {
+    const i = P * (annualPct / 100) * years;
+    return { principal: P, interest: i, total: P + i };
+  },
+  /* Effective monthly growth factor of a nominal annual rate compounded
+     perYear times a year. */
+  monthlyGrowth(annualPct, perYear) {
+    return Math.pow(1 + (annualPct / 100) / perYear, perYear / 12);
+  },
+  compound(o) {
+    const g = this.monthlyGrowth(o.annualPct, o.perYear);
+    const n = Math.max(1, Math.round(o.years * 12));
+    let bal = o.pv, contrib = o.pv;
+    const series = [{ month: 0, year: 0, balance: bal, contrib, gain: 0 }];
+    for (let m = 1; m <= n; m++) {
+      bal = bal * g + o.monthly; contrib += o.monthly;
+      if (m % 12 === 0 || m === n) series.push({ month: m, year: Math.round(m / 12 * 10) / 10, balance: bal, contrib, gain: bal - contrib });
+    }
+    return { series, months: n, final: bal, contrib, gain: bal - contrib };
+  },
+  requiredSaving(target, pv, annualPct, years, perYear) {
+    const i = this.monthlyGrowth(annualPct, perYear) - 1;
+    const n = Math.max(1, Math.round(years * 12));
+    const need = target - pv * Math.pow(1 + i, n);
+    if (need <= 0) return 0;
+    return i ? need * i / (Math.pow(1 + i, n) - 1) : need / n;
+  },
+  refinance(o) {
+    const oldL = this.amortize({ principal: o.balance, months: o.monthsLeft, sched: [{ months: o.monthsLeft, annual: o.oldRate }] });
+    const newPrincipal = o.balance + (o.rollFees ? o.fees : 0);
+    const newL = this.amortize({ principal: newPrincipal, months: o.newMonths, sched: [{ months: o.newMonths, annual: o.newRate }], extraMonthly: o.extraMonthly || 0 });
+    const cash = o.rollFees ? 0 : o.fees;
+    const monthlySave = oldL.basePayment - newL.basePayment;
+    return {
+      oldL, newL, newPrincipal,
+      oldTotal: oldL.totalPayment, newTotal: newL.totalPayment + cash,
+      netSaving: oldL.totalPayment - (newL.totalPayment + cash),
+      monthlySave,
+      breakeven: monthlySave > 0 ? o.fees / monthlySave : Infinity
+    };
+  },
+  affordability(o) {
+    const byDsr = o.income * (o.dsr / 100) - o.otherDebt;
+    const byCash = o.income - o.expense - o.otherDebt;
+    const maxPay = Math.max(0, Math.min(byDsr, byCash));
+    const maxLoan = this.maxPrincipal(maxPay, o.rate / 100 / 12, Math.round(o.years * 12));
+    return { maxPay, maxLoan, price: maxLoan + o.down, byDsr, byCash, limitedBy: byDsr <= byCash ? 'dsr' : 'cash' };
+  }
+};
+
+/* ===== ENGINE SELF-TESTS (verifiable, run in the browser) ===== */
+function runTests() {
+  const E = ENGINE, out = [];
+  const near = (a, b, tol) => Math.abs(a - b) <= (tol === undefined ? 0.5 : tol);
+  const add = (th, en, pass, detail) => out.push({ th, en, pass, detail });
+
+  add('ดอกเบี้ย 0% → ค่างวด = เงินต้น ÷ จำนวนงวด', '0% interest → payment = principal / periods', near(E.pmt(120000, 0, 12), 10000), '10,000.00');
+  const p1 = E.pmt(100000, 0.06 / 12, 12);
+  add('เงินต้น 100,000 · 6%/ปี · 12 งวด', 'P 100,000 · 6%/yr · 12 periods', near(p1, 8606.64, 0.02), p1.toFixed(2));
+  const a1 = E.amortize({ principal: 2400000, months: 360, sched: [{ months: 360, annual: 4.5 }] });
+  add('ผลรวมเงินต้นในตาราง = เงินกู้ตั้งต้น', 'schedule principal sums to the loan', near(a1.totalPrincipal, 2400000, 0.02), a1.totalPrincipal.toFixed(2));
+  add('เงินต้น + ดอกเบี้ย = ยอดจ่ายทั้งหมด', 'principal + interest = total paid', near(a1.totalPrincipal + a1.totalInterest, a1.totalPayment, 0.01), a1.totalPayment.toFixed(0));
+  add('งวดสุดท้ายเหลือเงินต้น 0 พอดี', 'final balance is exactly 0', a1.rows[a1.rows.length - 1].balance === 0, '0.00');
+  const shortL = E.amortize({ principal: 50000, months: 6, sched: [{ months: 6, annual: 1 }] });
+  add('สินเชื่อระยะสั้น 6 งวด · 1%', 'short 6-period loan · 1%', near(E.pmt(50000, 0.01 / 12, 6) * 6 - 50000, shortL.totalInterest, 0.5), shortL.totalInterest.toFixed(2));
+  const bigL = E.amortize({ principal: 50000000, months: 360, sched: [{ months: 360, annual: 5 }] });
+  add('เงินต้นก้อนใหญ่ 50 ล้าน · 30 ปี', 'large principal 50M · 30 years', near(bigL.totalPrincipal, 50000000, 0.05), bigL.months + ' periods');
+  const f1 = E.flat(800000, 3, 60);
+  add('Flat 3% · 800,000 · 5 ปี → ดอกเบี้ย 120,000', 'flat 3% · 800,000 · 5y → interest 120,000', near(f1.totalInterest, 120000, 0.01), f1.totalInterest.toFixed(0));
+  add('Flat 3% มีต้นทุนจริงสูงกว่าลดต้นลดดอก 3%', 'flat 3% costs more than 3% reducing', f1.effAnnual > 5 && f1.effAnnual < 6, f1.effAnnual.toFixed(2) + '%');
+  const a2 = E.amortize({ principal: 2400000, months: 360, sched: [{ months: 360, annual: 4.5 }], extraMonthly: 5000 });
+  add('โปะเพิ่ม → หมดหนี้เร็วขึ้นและดอกเบี้ยลด', 'extra payment shortens term and cuts interest', a2.months < a1.months && a2.totalInterest < a1.totalInterest, '-' + (a1.months - a2.months) + ' periods');
+  const stp = E.amortize({ principal: 2000000, months: 360, sched: [{ months: 12, annual: 2.5 }, { months: 12, annual: 3 }, { months: 12, annual: 3.5 }, { months: 324, annual: 4.5 }] });
+  add('ดอกเบี้ยขั้นบันไดคิดแยกช่วงจริง', 'step-up rate applied per period', stp.rows[0].interest < stp.rows[40].interest, 'p1 < p41');
+  const c1 = ENGINE.compound({ pv: 100000, monthly: 0, annualPct: 10, years: 10, perYear: 1 });
+  add('ทบต้นปีละครั้ง 10% · 10 ปี → 259,374', 'annual compounding 10% · 10y → 259,374', near(c1.final, 259374.25, 1), c1.final.toFixed(0));
+  const s1 = E.simple(100000, 5, 3);
+  add('ดอกเบี้ยคงที่ 100,000 · 5% · 3 ปี → 15,000', 'simple interest → 15,000', near(s1.interest, 15000, 0.01), s1.interest.toFixed(0));
+  const af = E.affordability({ income: 60000, expense: 20000, otherDebt: 5000, dsr: 40, down: 600000, rate: 4.5, years: 30 });
+  add('กู้ได้เท่าไร ↔ ค่างวดสอดคล้องกับสูตร', 'affordability round-trips through pmt', near(E.pmt(af.maxLoan, 0.045 / 12, 360), af.maxPay, 1), af.maxPay.toFixed(0));
+  const rf = E.refinance({ balance: 1800000, oldRate: 6, monthsLeft: 240, newRate: 3.5, newMonths: 240, fees: 30000, rollFees: false });
+  add('Refinance ดอกเบี้ยต่ำลง → ประหยัดสุทธิเป็นบวก', 'lower refi rate → positive net saving', rf.netSaving > 0 && rf.breakeven > 0, rf.breakeven.toFixed(1) + ' mo');
+  return out;
+}
+
+const FREQ = [[365, 'รายวัน', 'Daily'], [12, 'รายเดือน', 'Monthly'], [4, 'รายไตรมาส', 'Quarterly'], [1, 'รายปี', 'Annually']];
+
+const DICT = {
+  th: {
+    brand: 'เครื่องคำนวณสินเชื่อและดอกเบี้ย', print: 'พิมพ์', share: 'แชร์ลิงก์', shared: 'คัดลอกแล้ว',
+    kicker: 'คำนวณในเบราว์เซอร์คุณ · ไม่ส่งข้อมูลออก',
+    heroTitle: 'คำนวณดอกเบี้ยและค่างวดทั้งหมดในไม่กี่วินาที',
+    heroSub: 'รู้ทันทีว่าคุณต้องจ่ายเดือนละเท่าไร ดอกเบี้ยทั้งหมดเท่าไร และสุดท้ายคุณจะจ่ายเงินจริงทั้งหมดเท่าไร',
+    ctaStart: 'เริ่มคำนวณ', ctaFaq: 'ดอกเบี้ยคิดอย่างไร',
+    resultTitle: 'ผลการคำนวณของคุณ', meaning: 'ตัวเลขนี้หมายความว่าอย่างไร',
+    disclaimer: 'หมายเหตุ: ผลลัพธ์เป็นการประมาณการจากข้อมูลที่กรอก อัตราดอกเบี้ยจริง ค่าธรรมเนียม และวิธีคิดของสถาบันการเงินอาจแตกต่างกัน ไม่ใช่การอนุมัติสินเชื่อและไม่ใช่คำแนะนำการลงทุน',
+    reset: 'คืนค่าเริ่มต้น', errTitle: 'ยังคำนวณไม่ได้',
+    stepupLabel: 'ดอกเบี้ยขั้นบันได / โปรโมชั่นช่วงแรก',
+    extraTitle: 'จ่ายเพิ่ม / โปะ', lumpAt: 'โปะในงวดที่',
+    extraCompareTitle: 'ถ้าโปะเพิ่มทุกเดือน จะเกิดอะไรขึ้น',
+    extraCompareNote: 'เทียบกับแผนเดิมที่จ่ายตามค่างวดเท่านั้น — แถบยาวคือเงินที่จ่ายทั้งหมด',
+    whatIfTitle: 'ทดลองสถานการณ์: เงินดาวน์',
+    flatBoxTitle: 'Flat Rate ต่างจากลดต้นลดดอกอย่างไร',
+    testsTitle: 'ตรวจสอบสูตรคำนวณ', testsShow: 'ดูรายการทดสอบ', testsHide: 'ซ่อน',
+    faqTitle: 'คำถามที่พบบ่อย', faqSub: 'เรื่องที่คนเข้าใจผิดบ่อยที่สุดเกี่ยวกับดอกเบี้ย',
+    glossaryTitle: 'คำศัพท์ที่ใช้ในหน้านี้',
+    footer: 'การคำนวณทั้งหมดเกิดขึ้นในเบราว์เซอร์ของคุณ ไม่มีการส่งข้อมูลทางการเงินไปยังเซิร์ฟเวอร์ และไม่มีการจัดเก็บข้อมูลส่วนบุคคล ลิงก์แชร์เก็บค่าที่กรอกไว้ในตัว URL เท่านั้น ผลลัพธ์เป็นการประมาณการเพื่อการศึกษา ไม่ใช่คำแนะนำการลงทุนหรือการอนุมัติสินเชื่อ',
+    perMonth: 'ต่อเดือน', months: 'งวด', years: 'ปี', month: 'เดือน',
+    byYear: 'ดูรายปี', byMonth: 'ดูทุกงวด',
+    thPeriod: 'งวด', thYear: 'ปีที่', thWhen: 'ช่วงเวลา', thPay: 'ยอดชำระ', thPrin: 'เงินต้น', thInt: 'ดอกเบี้ย', thBal: 'คงเหลือ'
+  },
+  en: {
+    brand: 'Loan & Interest Calculator', print: 'Print', share: 'Share link', shared: 'Copied',
+    kicker: 'Runs in your browser · nothing leaves the page',
+    heroTitle: 'Every payment and every baht of interest, in seconds',
+    heroSub: 'See what you pay each month, how much of it is interest, and what the loan really costs you by the end.',
+    ctaStart: 'Start calculating', ctaFaq: 'How interest works',
+    resultTitle: 'Your result', meaning: 'What these numbers mean',
+    disclaimer: 'Note: results are estimates based on the values you entered. Real rates, fees and each lender’s method may differ. This is not a credit approval and not investment advice.',
+    reset: 'Reset to defaults', errTitle: 'Cannot calculate yet',
+    stepupLabel: 'Step-up rate / introductory promotion',
+    extraTitle: 'Extra payment', lumpAt: 'Lump sum at period',
+    extraCompareTitle: 'What paying extra every month does',
+    extraCompareNote: 'Against the plan where you pay only the scheduled instalment — bar length is total paid',
+    whatIfTitle: 'What if: down payment',
+    flatBoxTitle: 'Flat rate vs reducing balance',
+    testsTitle: 'Engine self-checks', testsShow: 'Show checks', testsHide: 'Hide',
+    faqTitle: 'Frequently asked', faqSub: 'The things people most often get wrong about interest',
+    glossaryTitle: 'Terms used on this page',
+    footer: 'Every calculation runs in your browser. No financial data is sent to a server and nothing personal is stored. A share link carries your inputs inside the URL itself. Results are estimates for education, not investment advice or a credit approval.',
+    perMonth: 'per month', months: 'periods', years: 'years', month: 'months',
+    byYear: 'By year', byMonth: 'Every period',
+    thPeriod: 'Period', thYear: 'Year', thWhen: 'When', thPay: 'Payment', thPrin: 'Principal', thInt: 'Interest', thBal: 'Balance'
+  }
+};
+
+const DEFAULTS = {
+  home: { price: 3000000, downPct: 20, rate: 4.5, years: 30, fees: 30000, insurance: 0, stepup: false, steps: [2.5, 3, 3.5, 4.5] },
+  auto: { price: 1000000, downPct: 20, rate: 3, years: 5, fees: 5000, balloon: 0 },
+  comp: { pv: 100000, monthly: 5000, rate: 7, years: 20, perYear: 12, goal: 0 },
+  refi: { balance: 1800000, oldRate: 6, monthsLeft: 240, newRate: 3.5, newYears: 20, fees: 30000, rollFees: 0 },
+  afford: { income: 60000, expense: 20000, otherDebt: 5000, dsr: 40, down: 600000, rate: 4.5, years: 30 },
+  extra: { mode: 'none', amount: 5000, lumpMonth: 12 }
+};
+
+class Component extends DCLogic {
+  state = {
+    lang: 'th', tab: 'home',
+    home: Object.assign({}, DEFAULTS.home, { steps: DEFAULTS.home.steps.slice() }),
+    auto: Object.assign({}, DEFAULTS.auto),
+    comp: Object.assign({}, DEFAULTS.comp),
+    refi: Object.assign({}, DEFAULTS.refi),
+    afford: Object.assign({}, DEFAULTS.afford),
+    extra: Object.assign({}, DEFAULTS.extra),
+    raw: {}, amortView: 'year', showTests: false, shared: false
+  };
+
+  componentDidMount() {
+    if (this.props.language === 'en' || this.props.language === 'th') this.setState({ lang: this.props.language });
+    if (this.props.defaultTab) this.setState({ tab: this.props.defaultTab });
+    try {
+      const h = location.hash.replace(/^#s=/, '');
+      if (h && location.hash.indexOf('#s=') === 0) {
+        const o = JSON.parse(decodeURIComponent(escape(atob(decodeURIComponent(h)))));
+        if (o && o.tab) this.setState(o);
+      }
+    } catch (e) { /* a malformed link just falls back to defaults */ }
+  }
+
+  /* ---------- formatting ---------- */
+  get L() { return DICT[this.state.lang]; }
+  n(v, d) { return (v === null || v === undefined || !isFinite(v)) ? '—' : v.toLocaleString('en-US', { minimumFractionDigits: d || 0, maximumFractionDigits: d || 0 }); }
+  b(v, d) { return '฿' + this.n(v, d); }
+  short(v) {
+    const th = this.state.lang === 'th';
+    if (Math.abs(v) >= 1e6) return this.n(v / 1e6, 2) + (th ? ' ล้าน' : 'M');
+    if (Math.abs(v) >= 1e3) return this.n(v / 1e3, 0) + (th ? 'K' : 'K');
+    return this.n(v, 0);
+  }
+  bshort(v) { return '฿' + this.short(v); }
+  dur(m) {
+    const y = Math.floor(m / 12), mm = m % 12;
+    const L = this.L;
+    if (!isFinite(m)) return '—';
+    if (y === 0) return mm + ' ' + L.month;
+    return y + ' ' + L.years + (mm ? ' ' + mm + ' ' + L.month : '');
+  }
+
+  /* ---------- state plumbing ---------- */
+  set(group, key, v) { this.setState(s => ({ [group]: Object.assign({}, s[group], { [key]: v }) })); }
+  numField(group, key, opts) {
+    const o = opts || {};
+    const val = this.state[group][key];
+    const rk = group + '.' + key;
+    const raw = this.state.raw[rk];
+    return {
+      isNumber: true, isSeg: false, isSelect: false,
+      label: o.label, unit: o.unit || '', hint: o.hint || '',
+      error: o.error || '', border: o.error ? '#d98484' : '#3f424d',
+      display: raw !== undefined ? raw : (o.plain ? String(val) : this.n(val, o.dec || 0)),
+      onChange: e => {
+        const txt = e.target.value;
+        const num = parseFloat(txt.replace(/[^0-9.\-]/g, ''));
+        this.setState(s => ({ raw: Object.assign({}, s.raw, { [rk]: txt }), [group]: Object.assign({}, s[group], { [key]: isNaN(num) ? 0 : num }) }));
+      },
+      onBlur: () => this.setState(s => { const r = Object.assign({}, s.raw); delete r[rk]; return { raw: r }; })
+    };
+  }
+  seg(label, options) { return { isSeg: true, isNumber: false, isSelect: false, label, unit: '', options }; }
+  segOpt(label, active, onClick) {
+    return { label, onClick, bg: active ? '#3f424d' : 'transparent', fg: active ? '#f3f5fe' : '#9397ab' };
+  }
+
+  /* ---------- exports ---------- */
+  csv(rows, name) {
+    const head = ['period', 'payment', 'principal', 'interest', 'balance'];
+    const body = rows.map(r => [r.m, r.payment.toFixed(2), r.principal.toFixed(2), r.interest.toFixed(2), r.balance.toFixed(2)].join(','));
+    const blob = new Blob(['\ufeff' + head.join(',') + '\n' + body.join('\n')], { type: 'text/csv;charset=utf-8' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob); a.download = name + '.csv'; a.click();
+    setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+  }
+  share() {
+    const s = this.state;
+    const payload = { tab: s.tab, lang: s.lang, home: s.home, auto: s.auto, comp: s.comp, refi: s.refi, afford: s.afford, extra: s.extra };
+    try {
+      const enc = btoa(unescape(encodeURIComponent(JSON.stringify(payload))));
+      history.replaceState(null, '', '#s=' + encodeURIComponent(enc));
+      if (navigator.clipboard) navigator.clipboard.writeText(location.href);
+      this.setState({ shared: true });
+      setTimeout(() => this.setState({ shared: false }), 2200);
+    } catch (e) { /* clipboard blocked — the URL is still updated */ }
+  }
+  scrollTo(id) {
+    const el = document.getElementById(id);
+    if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.pageYOffset - 64, behavior: 'smooth' });
+  }
+
+  /* ---------- per-tab models ---------- */
+  homeModel() {
+    const h = this.state.home, x = this.state.extra;
+    const down = h.price * (h.downPct / 100);
+    const loan = Math.max(0, h.price - down);
+    const months = Math.round(h.years * 12);
+    const sched = h.stepup
+      ? [{ months: 12, annual: h.steps[0] }, { months: 12, annual: h.steps[1] }, { months: 12, annual: h.steps[2] }, { months: Math.max(1, months - 36), annual: h.steps[3] }]
+      : [{ months, annual: h.rate }];
+    const base = ENGINE.amortize({ principal: loan, months, sched });
+    const withExtra = ENGINE.amortize({
+      principal: loan, months, sched,
+      extraMonthly: x.mode === 'monthly' ? x.amount : 0,
+      extraAnnual: x.mode === 'annual' ? x.amount : 0,
+      lump: x.mode === 'lump' ? x.amount : 0, lumpMonth: x.lumpMonth
+    });
+    return { down, loan, months, sched, base, active: x.mode === 'none' ? base : withExtra, fees: h.fees + h.insurance };
+  }
+  autoModel() {
+    const a = this.state.auto;
+    const down = a.price * (a.downPct / 100);
+    const loan = Math.max(0, a.price - down);
+    const months = Math.round(a.years * 12);
+    const f = ENGINE.flat(loan, a.rate, months, a.balloon);
+    const red = ENGINE.amortize({ principal: loan, months, sched: [{ months, annual: a.rate }] });
+    return { down, loan, months, flat: f, red, fees: a.fees };
+  }
+  refiModel() {
+    const r = this.state.refi;
+    return ENGINE.refinance({
+      balance: r.balance, oldRate: r.oldRate, monthsLeft: Math.round(r.monthsLeft),
+      newRate: r.newRate, newMonths: Math.round(r.newYears * 12), fees: r.fees, rollFees: !!r.rollFees
+    });
+  }
+  compModel() {
+    const c = this.state.comp;
+    const res = ENGINE.compound({ pv: c.pv, monthly: c.monthly, annualPct: c.rate, years: c.years, perYear: c.perYear });
+    const need = c.goal > 0 ? ENGINE.requiredSaving(c.goal, c.pv, c.rate, c.years, c.perYear) : 0;
+    return { res, need };
+  }
+  affordModel() { const a = this.state.afford; return ENGINE.affordability(a); }
+
+  /* ---------- validation ---------- */
+  validate() {
+    const th = this.state.lang === 'th', s = this.state, errs = [];
+    const E = (t, e) => errs.push(th ? t : e);
+    const pos = (v, t, e) => { if (!(v > 0)) E(t, e); };
+    if (s.tab === 'home') {
+      pos(s.home.price, 'กรุณากรอกราคาบ้านให้มากกว่า 0', 'Enter a property price above 0');
+      if (s.home.downPct >= 100) E('เงินดาวน์ต้องไม่มากกว่าหรือเท่ากับราคาบ้าน', 'The down payment cannot equal or exceed the price');
+      if (s.home.downPct < 0) E('เงินดาวน์ต้องไม่ติดลบ', 'The down payment cannot be negative');
+      pos(s.home.years, 'ระยะเวลากู้ต้องมากกว่า 0 ปี', 'The term must be more than 0 years');
+      if (s.home.rate < 0) E('อัตราดอกเบี้ยต้องไม่ติดลบ', 'The interest rate cannot be negative');
+      if (s.home.years > 50) E('ระยะเวลากู้ยาวเกินไป (ไม่เกิน 50 ปี)', 'Term is too long (50 years maximum)');
+    }
+    if (s.tab === 'auto') {
+      pos(s.auto.price, 'กรุณากรอกราคารถให้มากกว่า 0', 'Enter a vehicle price above 0');
+      if (s.auto.downPct >= 100) E('เงินดาวน์ต้องไม่มากกว่าหรือเท่ากับราคารถ', 'The down payment cannot equal or exceed the price');
+      pos(s.auto.years, 'ระยะเวลาผ่อนต้องมากกว่า 0 ปี', 'The term must be more than 0 years');
+      if (s.auto.rate < 0) E('อัตราดอกเบี้ยต้องไม่ติดลบ', 'The flat rate cannot be negative');
+      const loan = s.auto.price * (1 - s.auto.downPct / 100);
+      if (s.auto.balloon >= loan) E('Balloon payment ต้องน้อยกว่ายอดจัด', 'The balloon payment must be smaller than the financed amount');
+    }
+    if (s.tab === 'comp') {
+      if (s.comp.pv < 0 || s.comp.monthly < 0) E('เงินต้นและเงินฝากต่อเดือนต้องไม่ติดลบ', 'Starting amount and monthly deposit cannot be negative');
+      pos(s.comp.years, 'ระยะเวลาต้องมากกว่า 0 ปี', 'The horizon must be more than 0 years');
+      if (s.comp.pv === 0 && s.comp.monthly === 0) E('กรุณากรอกเงินต้นหรือเงินฝากต่อเดือนอย่างน้อยหนึ่งช่อง', 'Enter a starting amount or a monthly deposit');
+    }
+    if (s.tab === 'refi') {
+      pos(s.refi.balance, 'กรุณากรอกยอดหนี้คงเหลือ', 'Enter the outstanding balance');
+      pos(s.refi.monthsLeft, 'จำนวนงวดที่เหลือต้องมากกว่า 0', 'Remaining periods must be above 0');
+      pos(s.refi.newYears, 'ระยะเวลาสัญญาใหม่ต้องมากกว่า 0 ปี', 'The new term must be more than 0 years');
+      if (s.refi.oldRate < 0 || s.refi.newRate < 0) E('อัตราดอกเบี้ยต้องไม่ติดลบ', 'Interest rates cannot be negative');
+    }
+    if (s.tab === 'afford') {
+      pos(s.afford.income, 'กรุณากรอกรายได้ต่อเดือน', 'Enter your monthly income');
+      pos(s.afford.years, 'ระยะเวลากู้ต้องมากกว่า 0 ปี', 'The term must be more than 0 years');
+      if (s.afford.dsr <= 0 || s.afford.dsr > 100) E('สัดส่วนภาระหนี้ต่อรายได้ต้องอยู่ระหว่าง 1–100%', 'Debt-service ratio must be between 1 and 100%');
+      const m = ENGINE.affordability(s.afford);
+      if (m.maxPay <= 0) E('รายได้หลังหักค่าใช้จ่ายและหนี้เดิมไม่เหลือพอผ่อน', 'Nothing is left to service a loan after expenses and existing debt');
+    }
+    return errs;
+  }
+
+  /* ---------- content ---------- */
+  faqs() {
+    const th = this.state.lang === 'th';
+    const F = [
+      ['ค่างวดบ้านคำนวณอย่างไร', 'How is a mortgage payment calculated?',
+        'สินเชื่อบ้านเป็นแบบลดต้นลดดอก ค่างวดคงที่มาจากสูตร M = P × r(1+r)ⁿ / ((1+r)ⁿ − 1) โดย r คือดอกเบี้ยต่อปีหารด้วย 12 และ n คือจำนวนงวด ดอกเบี้ยแต่ละงวดคิดจากยอดหนี้ที่เหลือจริงในงวดนั้น',
+        'A mortgage uses a reducing balance. The fixed instalment comes from M = P × r(1+r)ⁿ / ((1+r)ⁿ − 1), where r is the annual rate divided by 12 and n is the number of periods. Each period’s interest is charged on the balance still outstanding.'],
+      ['ทำไมช่วงแรกจ่ายดอกเบี้ยเยอะ เงินต้นลดช้า', 'Why is early interest so high?',
+        'เพราะดอกเบี้ยคิดจากยอดหนี้คงเหลือ ตอนเริ่มสัญญายอดหนี้ยังเต็มจำนวน ดอกเบี้ยจึงกินค่างวดไปเกือบหมด เมื่อเงินต้นลดลง ดอกเบี้ยในแต่ละงวดก็ลดลงและส่วนที่ไปตัดเงินต้นก็โตขึ้นเรื่อยๆ',
+        'Interest is charged on the outstanding balance. At the start the balance is at its highest, so interest eats most of the instalment. As principal falls, each period’s interest shrinks and the share going to principal grows.'],
+      ['Flat Rate กับลดต้นลดดอกต่างกันอย่างไร', 'Flat rate vs reducing balance?',
+        'Flat Rate คิดดอกเบี้ยจากเงินต้นเต็มจำนวนทุกงวดตลอดสัญญา ไม่ว่าจะผ่อนไปแล้วเท่าไร ส่วนลดต้นลดดอกคิดจากยอดคงเหลือจริง ดังนั้นดอกเบี้ย Flat 3% มีต้นทุนจริงใกล้เคียงดอกเบี้ยลดต้นลดดอกราว 5–6%',
+        'A flat rate charges interest on the original principal for the whole term, no matter how much you have repaid. A reducing balance charges only on what is left. A 3% flat rate therefore costs roughly the same as 5–6% on a reducing balance.'],
+      ['โปะช่วยลดดอกเบี้ยได้จริงหรือไม่', 'Does paying extra really help?',
+        'ได้จริงกับสินเชื่อลดต้นลดดอก เพราะเงินที่โปะเข้าไปตัดเงินต้นทันที ดอกเบี้ยงวดถัดไปจึงคิดจากยอดที่น้อยลง ผลคือหมดหนี้เร็วขึ้นและดอกเบี้ยรวมลดลง แต่กับสินเชื่อ Flat Rate ต้องสอบถามเงื่อนไขส่วนลดดอกเบี้ยกรณีปิดก่อนกำหนดจากผู้ให้กู้',
+        'Yes, on a reducing-balance loan: the extra goes straight against principal, so the next period’s interest is charged on less. The term shortens and total interest falls. On a flat-rate loan, ask the lender what rebate applies if you settle early.'],
+      ['ผ่อน 30 ปีกับ 20 ปี แบบไหนดีกว่า', '30-year or 20-year term?',
+        'ยิ่งยาวค่างวดยิ่งต่ำแต่ดอกเบี้ยรวมยิ่งสูง เพราะจ่ายดอกเบี้ยนานกว่า วิธีที่หลายคนใช้คือกู้ยาวเพื่อให้ผ่านเกณฑ์ค่างวด แล้วโปะเพิ่มเมื่อมีเงินเหลือ ให้เปลี่ยนค่าในช่องระยะเวลาแล้วดูตัวเลขดอกเบี้ยรวมเปรียบเทียบเอง',
+        'A longer term means a lower instalment but more total interest, because you pay interest for longer. A common approach is to borrow long to pass the affordability test, then pay extra when you can. Change the term field and compare total interest yourself.'],
+      ['Refinance คุ้มหรือไม่', 'Is refinancing worth it?',
+        'ดูสองตัวเลข คือดอกเบี้ยที่ประหยัดได้ตลอดสัญญาใหม่ กับค่าธรรมเนียมทั้งหมดในการย้าย ถ้าประหยัดสุทธิเป็นบวกและระยะเวลาคืนทุนสั้นกว่าเวลาที่คุณจะถือสินเชื่อนี้ต่อ ก็คุ้ม อย่าลืมค่าจดจำนอง ค่าประเมิน และค่าปรับกรณีปิดก่อนกำหนด',
+        'Compare two numbers: the interest you save over the new contract, and every fee to move. If the net saving is positive and the payback period is shorter than how long you will keep the loan, it is worth it. Include mortgage registration, valuation and any prepayment penalty.'],
+      ['ดอกเบี้ยทบต้นทำงานอย่างไร', 'How does compounding work?',
+        'ดอกเบี้ยที่ได้จะถูกรวมเข้าไปเป็นเงินต้นในรอบถัดไป ทำให้รอบต่อไปได้ดอกเบี้ยจากยอดที่โตขึ้น ยิ่งทบถี่และยิ่งระยะเวลานาน ผลต่างยิ่งชัด เงิน 100,000 บาทที่ผลตอบแทน 10% ทบต้นปีละครั้ง จะเป็น 259,374 บาทใน 10 ปี',
+        'Each period’s interest joins the principal, so the next period earns on a larger base. The more frequent the compounding and the longer the horizon, the bigger the gap. 100,000 at 10% compounded annually becomes 259,374 in 10 years.'],
+      ['ธนาคารจะให้กู้ได้เท่าไร', 'How much will a bank lend?',
+        'โดยทั่วไปธนาคารดูสัดส่วนภาระหนี้ต่อรายได้ (DSR) ราว 30–50% ของรายได้ต่อเดือน หักหนี้ที่มีอยู่แล้วออก เครื่องคำนวณนี้ใช้เกณฑ์นั้นประมาณวงเงิน แต่การอนุมัติจริงยังดูประวัติเครดิต ความมั่นคงของรายได้ และมูลค่าหลักประกันด้วย',
+        'Banks typically allow a debt-service ratio of roughly 30–50% of monthly income, minus existing obligations. This calculator estimates on that basis, but real approval also weighs credit history, income stability and the value of the collateral.']
+    ];
+    return F.map(r => ({ q: th ? r[0] : r[1], a: th ? r[2] : r[3] }));
+  }
+  glossary() {
+    const th = this.state.lang === 'th';
+    const G = [
+      ['เงินต้น (Principal)', 'Principal', 'ยอดเงินที่กู้จริง ไม่รวมดอกเบี้ย', 'The amount actually borrowed, before any interest.'],
+      ['ลดต้นลดดอก (Reducing balance)', 'Reducing balance', 'ดอกเบี้ยคิดจากยอดหนี้คงเหลือในแต่ละงวด', 'Interest is charged on the balance still outstanding each period.'],
+      ['Flat Rate', 'Flat rate', 'ดอกเบี้ยคิดจากเงินต้นเต็มจำนวนตลอดสัญญา', 'Interest is charged on the original principal for the whole term.'],
+      ['Effective Rate', 'Effective rate', 'อัตราดอกเบี้ยแบบลดต้นลดดอกที่ให้ต้นทุนเท่ากับสินเชื่อนั้น ใช้เทียบข้ามผลิตภัณฑ์', 'The reducing-balance rate that costs the same — the number to compare products with.'],
+      ['ตารางผ่อนชำระ (Amortization)', 'Amortization schedule', 'ตารางที่แยกให้เห็นว่าแต่ละงวดจ่ายเป็นเงินต้นเท่าไร ดอกเบี้ยเท่าไร และเหลือหนี้เท่าไร', 'The period-by-period split of principal, interest and remaining balance.'],
+      ['DSR', 'DSR', 'สัดส่วนภาระหนี้ต่อรายได้ต่อเดือน เกณฑ์ที่ผู้ให้กู้ใช้จำกัดวงเงิน', 'Debt-service ratio: monthly debt payments as a share of monthly income.']
+    ];
+    return G.map(r => ({ term: th ? r[0] : r[1], def: th ? r[2] : r[3] }));
+  }
+
+  /* ---------- chart helpers ---------- */
+  curveFrom(points) {
+    if (!points.length) return { d: '', poly: '', max: 0 };
+    const max = Math.max.apply(null, points) || 1;
+    const W = 620, H = 164;
+    const xs = points.map((v, i) => (points.length === 1 ? 0 : i / (points.length - 1) * W));
+    const ys = points.map(v => H - (v / max) * (H - 8));
+    const poly = xs.map((x, i) => x.toFixed(1) + ',' + ys[i].toFixed(1)).join(' ');
+    const d = 'M0,' + H.toFixed(1) + ' L' + poly.split(' ').join(' L') + ' L' + W + ',' + H.toFixed(1) + ' Z';
+    return { d, poly, max };
+  }
+  bars(rows, keyA, keyB) {
+    const per = [];
+    rows.forEach(r => {
+      const y = Math.ceil(r.m / 12) - 1;
+      if (!per[y]) per[y] = { a: 0, b: 0 };
+      per[y].a += r[keyA]; per[y].b += r[keyB];
+    });
+    const max = Math.max.apply(null, per.map(p => p.a + p.b)) || 1;
+    return per.map((p, i) => ({
+      aH: (p.a / max * 100).toFixed(2), bH: (p.b / max * 100).toFixed(2),
+      title: (this.state.lang === 'th' ? 'ปีที่ ' : 'Year ') + (i + 1) + ' · ' + this.bshort(p.a) + ' / ' + this.bshort(p.b)
+    }));
+  }
+
+  renderVals() {
+    const s = this.state, L = this.L, th = s.lang === 'th';
+    const tests = runTests();
+    const passed = tests.filter(t => t.pass).length;
+    const errors = this.validate();
+    const ok = errors.length === 0;
+
+    const V = {
+      t: L,
+      langOpts: [['th', 'ไทย'], ['en', 'EN']].map(o => this.segOpt(o[1], s.lang === o[0], () => this.setState({ lang: o[0] }))),
+      onShare: () => this.share(),
+      shareLabel: s.shared ? L.shared : L.share,
+      onPrint: () => window.print(),
+      goCalc: () => this.scrollTo('calc'),
+      goFaq: () => this.scrollTo('faq'),
+      onReset: () => this.setState({
+        home: Object.assign({}, DEFAULTS.home, { steps: DEFAULTS.home.steps.slice() }),
+        auto: Object.assign({}, DEFAULTS.auto), comp: Object.assign({}, DEFAULTS.comp),
+        refi: Object.assign({}, DEFAULTS.refi), afford: Object.assign({}, DEFAULTS.afford),
+        extra: Object.assign({}, DEFAULTS.extra), raw: {}
+      }),
+      onToggleTests: () => this.setState({ showTests: !s.showTests }),
+      showTests: s.showTests,
+      showTestPanel: this.props.showEngineTests !== false,
+      testSummary: (th ? 'ผ่าน ' + passed + ' จาก ' + tests.length + ' รายการ · รันสดในเบราว์เซอร์ทุกครั้งที่เปิดหน้า' : passed + ' of ' + tests.length + ' checks pass · run live in your browser on every load'),
+      testToggleLabel: s.showTests ? L.testsHide : L.testsShow,
+      testRows: tests.map(x => ({ name: th ? x.th : x.en, detail: x.detail, mark: x.pass ? 'PASS' : 'FAIL', color: x.pass ? '#b5abfc' : '#d98484' })),
+      faqs: this.faqs(), glossary: this.glossary(),
+      errors, hasErrors: errors.length > 0, ok,
+      isHome: s.tab === 'home', isAuto: s.tab === 'auto', isComp: s.tab === 'comp', isRefi: s.tab === 'refi', isAfford: s.tab === 'afford',
+      amortView: s.amortView,
+      amortViewLabel: s.amortView === 'year' ? L.byMonth : L.byYear,
+      onToggleAmortView: () => this.setState({ amortView: s.amortView === 'year' ? 'month' : 'year' }),
+      stepup: !!s.home.stepup,
+      toggleStepup: () => this.set('home', 'stepup', !s.home.stepup),
+      hasTable2: false, table2Verdict: '', table2Foot: '', hasWhatIf: false, hasExtraCompare: false,
+      hasCharts: false, hasBreakdown: false, hasAmort: false, hasExtraPanel: false,
+      showExtraAmt: false, showLumpMonth: false, curveTicks: [], curveMarks: [], yearBars: []
+    };
+
+    const TABS = [
+      ['home', th ? 'สินเชื่อบ้าน' : 'Home loan', th ? 'ลดต้นลดดอก' : 'Reducing', th ? 'ค่างวด ดอกเบี้ยรวม ตารางผ่อน และผลของการโปะ' : 'Instalment, total interest, schedule and the effect of paying extra'],
+      ['auto', th ? 'สินเชื่อรถ' : 'Auto loan', 'Flat rate', th ? 'ดอกเบี้ยแบบ Flat Rate พร้อมอัตราเทียบเท่าลดต้นลดดอก' : 'Flat-rate financing with its reducing-balance equivalent'],
+      ['comp', th ? 'ดอกเบี้ยทบต้น' : 'Compounding', th ? 'เงินฝาก / ลงทุน' : 'Savings', th ? 'เงินต้น เงินฝากรายเดือน และผลตอบแทนทบต้น' : 'Lump sum, monthly deposits and compound growth'],
+      ['refi', 'Refinance', th ? 'เปรียบเทียบ' : 'Compare', th ? 'สัญญาเดิมกับสัญญาใหม่ คุ้มหรือไม่ และคืนทุนกี่เดือน' : 'Old vs new contract, net saving and payback period'],
+      ['afford', th ? 'กู้ได้เท่าไร' : 'Affordability', 'DSR', th ? 'รายได้เท่านี้ ผ่อนได้เดือนละเท่าไร และกู้ได้ประมาณเท่าไร' : 'What your income can service and roughly what you can borrow']
+    ];
+    V.cats = TABS.map(c => ({
+      tag: c[2], label: c[1], note: c[3],
+      border: s.tab === c[0] ? '#9184d9' : '#3f424d',
+      bg: s.tab === c[0] ? '#232532' : 'transparent',
+      onClick: () => { this.setState({ tab: c[0] }); this.scrollTo('calc'); }
+    }));
+
+    /* ================= HOME ================= */
+    if (s.tab === 'home') {
+      const m = this.homeModel(), h = s.home, x = s.extra;
+      V.panelTitle = th ? 'สินเชื่อบ้าน' : 'Home loan';
+      V.panelNote = th ? 'ลดต้นลดดอก — ดอกเบี้ยคิดจากยอดหนี้คงเหลือทุกงวด' : 'Reducing balance — interest is charged on what is still owed';
+      V.fields = [
+        Object.assign(this.numField('home', 'price', { label: th ? 'ราคาบ้าน' : 'Property price', unit: '฿' })),
+        Object.assign(this.numField('home', 'downPct', { label: th ? 'เงินดาวน์' : 'Down payment', unit: '%', plain: true, hint: (th ? 'เท่ากับ ' : 'That is ') + this.b(m.down) + (th ? ' · เงินกู้จริง ' : ' · loan ') + this.b(m.loan) })),
+        Object.assign(this.numField('home', 'years', { label: th ? 'ระยะเวลากู้' : 'Term', unit: th ? 'ปี' : 'years', plain: true, hint: m.months + ' ' + L.months })),
+        Object.assign(this.numField('home', 'fees', { label: th ? 'ค่าธรรมเนียมและค่าประเมิน' : 'Fees and valuation', unit: '฿' }))
+      ];
+      if (!h.stepup) V.fields.splice(2, 0, this.numField('home', 'rate', { label: th ? 'อัตราดอกเบี้ยต่อปี' : 'Annual interest rate', unit: '%', plain: true }));
+      V.stepFields = [0, 1, 2, 3].map(i => ({
+        label: i < 3 ? (th ? 'ปีที่ ' + (i + 1) : 'Year ' + (i + 1)) : (th ? 'ปีที่ 4 ขึ้นไป' : 'Year 4 onward'),
+        display: String(h.steps[i]),
+        onChange: e => { const v = parseFloat(e.target.value.replace(/[^0-9.]/g, '')); const st = h.steps.slice(); st[i] = isNaN(v) ? 0 : v; this.set('home', 'steps', st); }
+      }));
+
+      V.hasExtraPanel = true;
+      const modes = [['none', th ? 'ไม่โปะ' : 'None'], ['monthly', th ? 'ทุกเดือน' : 'Monthly'], ['annual', th ? 'ปีละครั้ง' : 'Yearly'], ['lump', th ? 'ก้อนเดียว' : 'Lump']];
+      V.extraModes = modes.map(o => this.segOpt(o[1], x.mode === o[0], () => this.set('extra', 'mode', o[0])));
+      V.showExtraAmt = x.mode !== 'none';
+      V.showLumpMonth = x.mode === 'lump';
+      V.extraAmtLabel = x.mode === 'lump' ? (th ? 'จำนวนเงินโปะ' : 'Lump sum') : (th ? 'โปะเพิ่มต่อครั้ง' : 'Extra per payment');
+      V.extraAmtText = this.b(x.amount);
+      V.extraSliderMax = x.mode === 'lump' ? Math.max(100000, Math.round(m.loan / 2)) : 50000;
+      V.extraSliderStep = x.mode === 'lump' ? 10000 : 500;
+      V.extraSliderVal = x.amount;
+      V.onExtraSlider = e => this.set('extra', 'amount', parseFloat(e.target.value));
+      V.lumpMonthVal = String(x.lumpMonth);
+      V.onLumpMonth = e => { const v = parseInt(e.target.value.replace(/[^0-9]/g, ''), 10); this.set('extra', 'lumpMonth', isNaN(v) ? 1 : Math.max(1, v)); };
+
+      if (ok) {
+        const A = m.active, B = m.base;
+        const total = A.totalPayment + m.fees;
+        V.resultCaption = (th ? 'เงินกู้ ' : 'Loan ') + this.b(m.loan) + ' · ' + (h.stepup ? (th ? 'ดอกเบี้ยขั้นบันได' : 'step-up rate') : h.rate + '%') + ' · ' + this.dur(A.months);
+        V.bigCards = [
+          { label: th ? 'เงินกู้ทั้งหมด' : 'Amount borrowed', value: this.bshort(m.loan), sub: (th ? 'ดาวน์ ' : 'Down ') + this.b(m.down), color: '#f3f5fe' },
+          { label: th ? 'ค่างวดต่อเดือน' : 'Monthly payment', value: this.b(A.rows[0] ? A.rows[0].payment : 0), sub: h.stepup ? (th ? 'งวดแรก · เปลี่ยนตามขั้นดอกเบี้ย' : 'first period · changes with each step') : (th ? 'คงที่ทั้งสัญญา' : 'fixed for the term'), color: '#f3f5fe' },
+          { label: th ? 'ดอกเบี้ยทั้งหมด' : 'Total interest', value: this.bshort(A.totalInterest), sub: this.n(A.totalInterest / m.loan * 100, 0) + (th ? '% ของเงินกู้' : '% of the loan'), color: '#b5abfc' },
+          { label: th ? 'จ่ายทั้งหมด' : 'Total paid', value: this.bshort(total), sub: A.months + ' ' + L.months + (m.fees ? (th ? ' + ค่าธรรมเนียม' : ' + fees') : ''), color: '#f3f5fe' }
+        ];
+        V.narrative = th
+          ? 'คุณกู้ ' + this.bshort(m.loan) + ' ที่ค่างวด ' + this.b(A.rows[0].payment) + ' ต่อเดือน ตลอด ' + this.dur(A.months) + ' คุณจะจ่ายเงินจริงประมาณ ' + this.bshort(total) + ' โดยเป็นดอกเบี้ยประมาณ ' + this.bshort(A.totalInterest) + ' หรือคิดเป็น ' + this.n(A.totalInterest / total * 100, 0) + '% ของเงินที่จ่ายออกไปทั้งหมด'
+          : 'You borrow ' + this.bshort(m.loan) + ' at ' + this.b(A.rows[0].payment) + ' a month. Over ' + this.dur(A.months) + ' you will pay about ' + this.bshort(total) + ', of which roughly ' + this.bshort(A.totalInterest) + ' is interest — ' + this.n(A.totalInterest / total * 100, 0) + '% of everything you hand over.';
+
+        V.hasBreakdown = true;
+        V.breakdownTitle = th ? 'เงินที่จ่ายทั้งหมดแบ่งเป็นอะไร' : 'What your total payment is made of';
+        V.pctA = (m.loan / total * 100).toFixed(2);
+        V.pctB = (A.totalInterest / total * 100).toFixed(2);
+        V.pctC = (m.fees / total * 100).toFixed(2);
+        V.pctAText = this.n(m.loan / total * 100, 0) + '%';
+        V.pctBText = this.n(A.totalInterest / total * 100, 0) + '%';
+        V.legend = [
+          { color: '#b2b6ca', label: th ? 'เงินต้น' : 'Principal', value: this.bshort(m.loan) },
+          { color: '#9184d9', label: th ? 'ดอกเบี้ย' : 'Interest', value: this.bshort(A.totalInterest) },
+          { color: '#595d6c', label: th ? 'ค่าธรรมเนียม' : 'Fees', value: this.bshort(m.fees) }
+        ];
+
+        V.hasCharts = true;
+        const yearEnds = [m.loan].concat(A.rows.filter(r => r.m % 12 === 0).map(r => r.balance));
+        const c = this.curveFrom(yearEnds);
+        V.curveTitle = th ? 'ยอดหนี้คงเหลือ' : 'Remaining balance';
+        V.curveNote = th ? 'สิ้นปีที่เท่าไร เหลือหนี้เท่าไร' : 'What is left at the end of each year';
+        V.curveArea = c.d; V.curvePoints = c.poly;
+        const lastY = Math.ceil(A.months / 12);
+        V.curveTicks = [0, 1, 2, 3, 4].map(i => (th ? 'ปี ' : 'Y') + Math.round(i * lastY / 4));
+        const at = y => { const r = A.rows.filter(r => r.m <= y * 12).pop(); return r ? r.balance : m.loan; };
+        V.curveMarks = [1, 5, 10, lastY].filter((y, i, arr) => arr.indexOf(y) === i && y <= lastY)
+          .map(y => ({ label: (th ? 'สิ้นปีที่ ' : 'End of year ') + y, value: this.bshort(at(y)) }));
+        V.barsTitle = th ? 'เงินต้นกับดอกเบี้ยในแต่ละปี' : 'Principal vs interest by year';
+        V.barsNote = th ? 'แถบสีม่วงคือดอกเบี้ย ช่วงแรกกินค่างวดเกือบทั้งก้อน' : 'Purple is interest — early on it takes nearly the whole instalment';
+        V.yearBars = this.bars(A.rows, 'principal', 'interest');
+        V.barsFirst = (th ? 'ปีที่ 1' : 'Year 1'); V.barsLast = (th ? 'ปีที่ ' : 'Year ') + lastY;
+
+        V.hasExtraCompare = true;
+        const maxTotal = B.totalPayment;
+        V.extraRows = [0, 2000, 5000, 10000].map(amt => {
+          const r = amt === 0 ? B : ENGINE.amortize({ principal: m.loan, months: m.months, sched: m.sched, extraMonthly: amt });
+          const w = r.totalPayment / maxTotal * 100;
+          return {
+            label: amt === 0 ? (th ? 'จ่ายตามค่างวด' : 'Scheduled only') : (th ? 'โปะเพิ่ม ' : '+') + this.n(amt) + (th ? ' /เดือน' : '/mo'),
+            detail: this.dur(r.months) + ' · ' + (th ? 'ดอกเบี้ย ' : 'interest ') + this.bshort(r.totalInterest) + (amt ? ' · ' + (th ? 'ประหยัด ' : 'saves ') + this.bshort(B.totalInterest - r.totalInterest) : ''),
+            pW: (m.loan / maxTotal * 100).toFixed(2), iW: (r.totalInterest / maxTotal * 100).toFixed(2)
+          };
+        });
+
+        V.hasWhatIf = true;
+        V.whatIfNote = (th ? 'ตอนนี้ดาวน์ ' : 'Currently ') + this.n(h.downPct, 0) + '% · ' + this.b(m.down);
+        V.downPctVal = h.downPct;
+        V.onDownSlider = e => this.set('home', 'downPct', parseFloat(e.target.value));
+        const base20 = ENGINE.amortize({ principal: h.price * (1 - DEFAULTS.home.downPct / 100), months: m.months, sched: m.sched });
+        const d = (a, b, invert) => {
+          const diff = a - b;
+          if (Math.abs(diff) < 1) return { txt: th ? 'เท่าเดิม' : 'unchanged', col: '#9397ab' };
+          const good = invert ? diff > 0 : diff < 0;
+          return { txt: (diff < 0 ? '−' : '+') + this.bshort(Math.abs(diff)), col: good ? '#b5abfc' : '#9397ab' };
+        };
+        const dPay = d(A.rows[0].payment, base20.rows[0].payment);
+        const dInt = d(A.totalInterest, base20.totalInterest);
+        const dTot = d(A.totalPayment, base20.totalPayment);
+        V.whatIfRows = [
+          { label: th ? 'เงินกู้' : 'Loan', value: this.bshort(m.loan), delta: (th ? 'ดาวน์ ' : 'down ') + this.bshort(m.down), color: '#9397ab' },
+          { label: th ? 'ค่างวด' : 'Payment', value: this.b(A.rows[0].payment), delta: dPay.txt + (th ? ' เทียบดาวน์ 20%' : ' vs 20% down'), color: dPay.col },
+          { label: th ? 'ดอกเบี้ยรวม' : 'Total interest', value: this.bshort(A.totalInterest), delta: dInt.txt, color: dInt.col },
+          { label: th ? 'จ่ายทั้งหมด' : 'Total paid', value: this.bshort(A.totalPayment), delta: dTot.txt, color: dTot.col }
+        ];
+
+        V.hasAmort = true;
+        V.amortTitle = th ? 'ตารางผ่อนชำระ' : 'Amortization schedule';
+        V.amortNote = th ? 'ทุกงวดแยกเงินต้น ดอกเบี้ย และยอดคงเหลือ — ตัวเลขเดียวกับที่ใช้คำนวณสรุปด้านบน' : 'Principal, interest and balance for every period — the same numbers behind the summary above';
+        this.fillAmort(V, A.rows, 'home-loan');
+      }
+    }
+
+    /* ================= AUTO ================= */
+    if (s.tab === 'auto') {
+      const m = this.autoModel(), a = s.auto;
+      V.panelTitle = th ? 'สินเชื่อรถยนต์' : 'Auto loan';
+      V.panelNote = th ? 'Flat Rate — ดอกเบี้ยคิดจากยอดจัดเต็มจำนวนตลอดสัญญา' : 'Flat rate — interest is charged on the full financed amount throughout';
+      V.fields = [
+        this.numField('auto', 'price', { label: th ? 'ราคารถ' : 'Vehicle price', unit: '฿' }),
+        this.numField('auto', 'downPct', { label: th ? 'เงินดาวน์' : 'Down payment', unit: '%', plain: true, hint: (th ? 'เท่ากับ ' : 'That is ') + this.b(m.down) + (th ? ' · ยอดจัด ' : ' · financed ') + this.b(m.loan) }),
+        this.numField('auto', 'rate', { label: th ? 'ดอกเบี้ย Flat Rate ต่อปี' : 'Flat rate per year', unit: '%', plain: true }),
+        this.numField('auto', 'years', { label: th ? 'ระยะเวลาผ่อน' : 'Term', unit: th ? 'ปี' : 'years', plain: true, hint: m.months + ' ' + L.months }),
+        this.numField('auto', 'balloon', { label: th ? 'Balloon payment (ถ้ามี)' : 'Balloon payment (optional)', unit: '฿', hint: th ? 'ยอดก้อนใหญ่ที่จ่ายงวดสุดท้าย' : 'A large final payment at the end of the term' }),
+        this.numField('auto', 'fees', { label: th ? 'ค่าธรรมเนียมและค่าโอน' : 'Fees and transfer', unit: '฿' })
+      ];
+      V.flatBoxBody = th
+        ? 'Flat Rate คิดดอกเบี้ยจากยอดจัดเต็มจำนวนทุกงวด ไม่ว่าคุณจะผ่อนไปแล้วเท่าไร ส่วนลดต้นลดดอกคิดจากหนี้ที่เหลือจริง ดอกเบี้ย Flat ' + a.rate + '% ที่คุณกรอกไว้ จึงมีต้นทุนจริงใกล้เคียง ' + this.n(m.flat.effAnnual, 2) + '% แบบลดต้นลดดอก'
+        : 'A flat rate charges interest on the full financed amount every period, no matter how much you have repaid; a reducing balance charges only on what is left. The ' + a.rate + '% flat rate you entered really costs about ' + this.n(m.flat.effAnnual, 2) + '% on a reducing balance.';
+
+      if (ok) {
+        const f = m.flat, total = f.totalPayment + m.fees;
+        V.resultCaption = (th ? 'ยอดจัด ' : 'Financed ') + this.b(m.loan) + ' · Flat ' + a.rate + '% · ' + this.dur(m.months);
+        V.bigCards = [
+          { label: th ? 'ยอดจัดไฟแนนซ์' : 'Amount financed', value: this.bshort(m.loan), sub: (th ? 'ดาวน์ ' : 'Down ') + this.b(m.down), color: '#f3f5fe' },
+          { label: th ? 'ค่างวดต่อเดือน' : 'Monthly payment', value: this.b(f.payment), sub: m.months + ' ' + L.months, color: '#f3f5fe' },
+          { label: th ? 'ดอกเบี้ยทั้งหมด' : 'Total interest', value: this.bshort(f.totalInterest), sub: (th ? 'เทียบเท่า ' : 'equals ') + this.n(f.effAnnual, 2) + (th ? '% ลดต้นลดดอก' : '% reducing'), color: '#b5abfc' },
+          { label: th ? 'จ่ายทั้งหมด' : 'Total paid', value: this.bshort(total), sub: m.fees ? (th ? 'รวมค่าธรรมเนียม' : 'including fees') : (th ? 'ไม่รวมค่าประกัน' : 'excluding insurance'), color: '#f3f5fe' }
+        ];
+        V.narrative = th
+          ? 'ยอดจัด ' + this.bshort(m.loan) + ' ที่ดอกเบี้ย Flat ' + a.rate + '% เป็นเวลา ' + this.dur(m.months) + ' ทำให้ค่างวดคงที่ ' + this.b(f.payment) + ' ต่อเดือน ดอกเบี้ยรวม ' + this.bshort(f.totalInterest) + ' และจ่ายจริงทั้งหมด ' + this.bshort(total) + ' ดอกเบี้ย Flat ' + a.rate + '% นี้เทียบเท่าดอกเบี้ยแบบลดต้นลดดอกประมาณ ' + this.n(f.effAnnual, 2) + '% ซึ่งเป็นตัวเลขที่ควรใช้เทียบกับสินเชื่อประเภทอื่น'
+          : 'Financing ' + this.bshort(m.loan) + ' at a ' + a.rate + '% flat rate for ' + this.dur(m.months) + ' fixes the instalment at ' + this.b(f.payment) + ' a month, ' + this.bshort(f.totalInterest) + ' of interest and ' + this.bshort(total) + ' paid in total. That flat rate is equivalent to roughly ' + this.n(f.effAnnual, 2) + '% on a reducing balance — the number to use when comparing with other loans.';
+
+        V.hasBreakdown = true;
+        V.breakdownTitle = th ? 'เงินที่จ่ายทั้งหมดแบ่งเป็นอะไร' : 'What your total payment is made of';
+        V.pctA = (m.loan / total * 100).toFixed(2);
+        V.pctB = (f.totalInterest / total * 100).toFixed(2);
+        V.pctC = (m.fees / total * 100).toFixed(2);
+        V.pctAText = this.n(m.loan / total * 100, 0) + '%';
+        V.pctBText = this.n(f.totalInterest / total * 100, 0) + '%';
+        V.legend = [
+          { color: '#b2b6ca', label: th ? 'เงินต้น' : 'Principal', value: this.bshort(m.loan) },
+          { color: '#9184d9', label: th ? 'ดอกเบี้ย' : 'Interest', value: this.bshort(f.totalInterest) },
+          { color: '#595d6c', label: th ? 'ค่าธรรมเนียม' : 'Fees', value: this.bshort(m.fees) }
+        ];
+
+        V.hasCharts = true;
+        const ye = [m.loan].concat(f.rows.filter(r => r.m % 12 === 0).map(r => r.balance));
+        const c = this.curveFrom(ye);
+        V.curveTitle = th ? 'ยอดหนี้คงเหลือ' : 'Remaining balance';
+        V.curveNote = th ? 'Flat Rate ลดเงินต้นเป็นเส้นตรง เพราะแบ่งเงินต้นเท่ากันทุกงวด' : 'A flat-rate loan retires principal in a straight line — equal principal every period';
+        V.curveArea = c.d; V.curvePoints = c.poly;
+        const lastY = Math.ceil(m.months / 12);
+        V.curveTicks = [0, 1, 2, 3, 4].map(i => (th ? 'ปี ' : 'Y') + Math.round(i * lastY / 4));
+        V.curveMarks = f.rows.filter(r => r.m % 12 === 0).map(r => ({ label: (th ? 'สิ้นปีที่ ' : 'End of year ') + (r.m / 12), value: this.bshort(r.balance) }));
+        V.barsTitle = th ? 'เงินต้นกับดอกเบี้ยในแต่ละปี' : 'Principal vs interest by year';
+        V.barsNote = th ? 'Flat Rate จ่ายดอกเบี้ยเท่ากันทุกงวดจนงวดสุดท้าย' : 'A flat rate charges the same interest every period, right to the end';
+        V.yearBars = this.bars(f.rows, 'principal', 'interest');
+        V.barsFirst = (th ? 'ปีที่ 1' : 'Year 1'); V.barsLast = (th ? 'ปีที่ ' : 'Year ') + lastY;
+
+        V.hasTable2 = true;
+        V.table2Title = th ? 'Flat Rate เทียบกับลดต้นลดดอกที่อัตราเดียวกัน' : 'The same rate, charged two different ways';
+        V.table2Heads = [{ label: th ? 'รายการ' : 'Item', align: 'left' }, { label: 'Flat ' + a.rate + '%', align: 'right' }, { label: (th ? 'ลดต้นลดดอก ' : 'Reducing ') + a.rate + '%', align: 'right' }];
+        const pair = (label, x, y, dec) => ({ label, cells: [{ text: x, weight: 500, color: '#e9e9ed' }, { text: y, weight: 400, color: '#9397ab' }] });
+        V.table2Rows = [
+          pair(th ? 'ค่างวดต่อเดือน' : 'Monthly payment', this.b(f.payment), this.b(m.red.rows[0].payment)),
+          pair(th ? 'ดอกเบี้ยทั้งหมด' : 'Total interest', this.b(f.totalInterest), this.b(m.red.totalInterest)),
+          pair(th ? 'จ่ายทั้งหมด' : 'Total paid', this.b(f.totalPayment), this.b(m.red.totalPayment)),
+          pair(th ? 'อัตราเทียบเท่า (Effective)' : 'Effective rate', this.n(f.effAnnual, 2) + '%', this.n(a.rate, 2) + '%')
+        ];
+        V.table2Foot = th
+          ? 'ตัวเลขสองคอลัมน์นี้มาจากสูตรที่แยกกันคนละชุด ไม่ใช่สูตรเดียวกัน สินเชื่อรถในไทยส่วนใหญ่เสนอเป็น Flat Rate ซึ่งตัวเลขดูต่ำกว่าความจริงเมื่อเทียบกับสินเชื่อบ้าน ใช้คอลัมน์อัตราเทียบเท่าในการเปรียบเทียบ'
+          : 'The two columns come from two separate formulas, not one. Vehicle finance is usually quoted as a flat rate, which looks lower than it is next to a mortgage — compare using the effective rate.';
+
+        V.hasWhatIf = true;
+        V.whatIfNote = (th ? 'ตอนนี้ดาวน์ ' : 'Currently ') + this.n(a.downPct, 0) + '% · ' + this.b(m.down);
+        V.downPctVal = a.downPct;
+        V.onDownSlider = e => this.set('auto', 'downPct', parseFloat(e.target.value));
+        const b20 = ENGINE.flat(a.price * (1 - DEFAULTS.auto.downPct / 100), a.rate, m.months, a.balloon);
+        const dd = (x, y) => { const diff = x - y; return Math.abs(diff) < 1 ? { txt: th ? 'เท่าเดิม' : 'unchanged', col: '#9397ab' } : { txt: (diff < 0 ? '−' : '+') + this.bshort(Math.abs(diff)), col: diff < 0 ? '#b5abfc' : '#9397ab' }; };
+        const p1 = dd(f.payment, b20.payment), i1 = dd(f.totalInterest, b20.totalInterest), t1 = dd(f.totalPayment, b20.totalPayment);
+        V.whatIfRows = [
+          { label: th ? 'ยอดจัด' : 'Financed', value: this.bshort(m.loan), delta: (th ? 'ดาวน์ ' : 'down ') + this.bshort(m.down), color: '#9397ab' },
+          { label: th ? 'ค่างวด' : 'Payment', value: this.b(f.payment), delta: p1.txt + (th ? ' เทียบดาวน์ 20%' : ' vs 20% down'), color: p1.col },
+          { label: th ? 'ดอกเบี้ยรวม' : 'Total interest', value: this.bshort(f.totalInterest), delta: i1.txt, color: i1.col },
+          { label: th ? 'จ่ายทั้งหมด' : 'Total paid', value: this.bshort(f.totalPayment), delta: t1.txt, color: t1.col }
+        ];
+
+        V.hasAmort = true;
+        V.amortTitle = th ? 'ตารางผ่อนชำระ (Flat Rate)' : 'Payment schedule (flat rate)';
+        V.amortNote = th ? 'ดอกเบี้ยเท่ากันทุกงวดเพราะคิดจากยอดจัดเต็มจำนวน' : 'Interest is identical every period because it is charged on the original amount';
+        this.fillAmort(V, f.rows, 'auto-loan');
+      }
+    }
+
+    /* ================= COMPOUND ================= */
+    if (s.tab === 'comp') {
+      const c = s.comp;
+      V.panelTitle = th ? 'ดอกเบี้ยทบต้น / เงินฝาก' : 'Compound interest';
+      V.panelNote = th ? 'ผลตอบแทนที่ได้ถูกทบเข้าเงินต้น แล้วสร้างผลตอบแทนต่อในรอบถัดไป' : 'Each period’s return joins the principal and earns in turn';
+      V.fields = [
+        this.numField('comp', 'pv', { label: th ? 'เงินต้นเริ่มต้น' : 'Starting amount', unit: '฿' }),
+        this.numField('comp', 'monthly', { label: th ? 'ฝากเพิ่มต่อเดือน' : 'Monthly deposit', unit: '฿' }),
+        this.numField('comp', 'rate', { label: th ? 'ผลตอบแทนต่อปี' : 'Annual return', unit: '%', plain: true }),
+        this.numField('comp', 'years', { label: th ? 'ระยะเวลา' : 'Horizon', unit: th ? 'ปี' : 'years', plain: true }),
+        {
+          isSelect: true, isNumber: false, isSeg: false, label: th ? 'ความถี่ในการทบต้น' : 'Compounding frequency', unit: '',
+          value: String(c.perYear),
+          options: FREQ.map(f => ({ value: String(f[0]), label: th ? f[1] : f[2] })),
+          onChange: e => this.set('comp', 'perYear', parseInt(e.target.value, 10))
+        },
+        this.numField('comp', 'goal', { label: th ? 'เป้าหมายเงิน (ถ้ามี)' : 'Target amount (optional)', unit: '฿', hint: th ? 'ใส่เพื่อดูว่าต้องออมเดือนละเท่าไรจึงถึงเป้า' : 'Enter a target to see the monthly saving it needs' })
+      ];
+
+      if (ok) {
+        const m = this.compModel(), R = m.res;
+        V.resultCaption = this.n(c.rate, 2) + (th ? '% ต่อปี · ทบ' : '% a year · compounded ') + (th ? FREQ.find(f => f[0] === c.perYear)[1] : FREQ.find(f => f[0] === c.perYear)[2].toLowerCase()) + ' · ' + this.dur(R.months);
+        V.bigCards = [
+          { label: th ? 'เงินที่ใส่ทั้งหมด' : 'Total contributed', value: this.bshort(R.contrib), sub: (th ? 'เริ่มต้น ' : 'from ') + this.bshort(c.pv) + (c.monthly ? (th ? ' + ' + this.n(c.monthly) + '/เดือน' : ' + ' + this.n(c.monthly) + '/mo') : ''), color: '#f3f5fe' },
+          { label: th ? 'ผลตอบแทนทั้งหมด' : 'Total return', value: this.bshort(R.gain), sub: this.n(R.gain / Math.max(1, R.contrib) * 100, 0) + (th ? '% ของเงินที่ใส่' : '% of contributions'), color: '#b5abfc' },
+          { label: th ? 'มูลค่ารวมปลายทาง' : 'Final value', value: this.bshort(R.final), sub: this.dur(R.months), color: '#f3f5fe' },
+          m.need > 0
+            ? { label: th ? 'ต้องออมเดือนละ' : 'Needed per month', value: this.b(m.need), sub: (th ? 'เพื่อถึง ' : 'to reach ') + this.bshort(c.goal), color: '#f3f5fe' }
+            : { label: th ? 'สัดส่วนที่มาจากการทบต้น' : 'Share from compounding', value: this.n(R.gain / Math.max(1, R.final) * 100, 0) + '%', sub: th ? 'ของมูลค่าปลายทาง' : 'of the final value', color: '#f3f5fe' }
+        ];
+        V.narrative = th
+          ? 'ถ้าคุณเริ่มด้วย ' + this.bshort(c.pv) + (c.monthly ? ' และฝากเพิ่ม ' + this.b(c.monthly) + ' ทุกเดือน' : '') + ' ที่ผลตอบแทน ' + this.n(c.rate, 2) + '% ต่อปี เป็นเวลา ' + this.dur(R.months) + ' คุณจะใส่เงินไปทั้งหมด ' + this.bshort(R.contrib) + ' และได้ผลตอบแทนอีก ' + this.bshort(R.gain) + ' รวมเป็น ' + this.bshort(R.final) + (m.need > 0 ? ' ถ้าต้องการให้ถึงเป้า ' + this.bshort(c.goal) + ' ต้องออมเดือนละ ' + this.b(m.need) : '')
+          : 'Starting with ' + this.bshort(c.pv) + (c.monthly ? ' and adding ' + this.b(c.monthly) + ' every month' : '') + ' at ' + this.n(c.rate, 2) + '% a year for ' + this.dur(R.months) + ', you contribute ' + this.bshort(R.contrib) + ' and earn ' + this.bshort(R.gain) + ' on top, ending at ' + this.bshort(R.final) + (m.need > 0 ? '. To reach ' + this.bshort(c.goal) + ' you would need to save ' + this.b(m.need) + ' a month.' : '.');
+
+        V.hasBreakdown = true;
+        V.breakdownTitle = th ? 'มูลค่าปลายทางแบ่งเป็นอะไร' : 'What the final value is made of';
+        V.pctA = (R.contrib / R.final * 100).toFixed(2);
+        V.pctB = (R.gain / R.final * 100).toFixed(2);
+        V.pctC = '0';
+        V.pctAText = this.n(R.contrib / R.final * 100, 0) + '%';
+        V.pctBText = this.n(R.gain / R.final * 100, 0) + '%';
+        V.legend = [
+          { color: '#b2b6ca', label: th ? 'เงินที่ใส่' : 'Contributed', value: this.bshort(R.contrib) },
+          { color: '#9184d9', label: th ? 'ผลตอบแทน' : 'Return', value: this.bshort(R.gain) }
+        ];
+
+        V.hasCharts = true;
+        const cur = this.curveFrom(R.series.map(p => p.balance));
+        V.curveTitle = th ? 'มูลค่าพอร์ตตามเวลา' : 'Value over time';
+        V.curveNote = th ? 'เส้นชันขึ้นเรื่อยๆ คือผลของการทบต้น' : 'The curve steepens — that is compounding at work';
+        V.curveArea = cur.d; V.curvePoints = cur.poly;
+        const ly = Math.ceil(c.years);
+        V.curveTicks = [0, 1, 2, 3, 4].map(i => (th ? 'ปี ' : 'Y') + Math.round(i * ly / 4));
+        V.curveMarks = R.series.filter(p => p.month > 0 && (p.month / 12 === ly || [1, 5, 10, 20].indexOf(p.month / 12) >= 0))
+          .map(p => ({ label: (th ? 'สิ้นปีที่ ' : 'End of year ') + Math.round(p.month / 12), value: this.bshort(p.balance) }));
+        V.barsTitle = th ? 'เงินที่ใส่กับผลตอบแทนในแต่ละปี' : 'Contributions vs return by year';
+        V.barsNote = th ? 'แถบสีม่วงคือผลตอบแทนสะสม ซึ่งค่อยๆ แซงเงินที่ใส่' : 'Purple is cumulative return, gradually overtaking what you put in';
+        const maxV = R.series[R.series.length - 1].balance || 1;
+        V.yearBars = R.series.filter(p => p.month > 0).map(p => ({
+          aH: (p.contrib / maxV * 100).toFixed(2), bH: (p.gain / maxV * 100).toFixed(2),
+          title: (th ? 'ปีที่ ' : 'Year ') + Math.round(p.month / 12) + ' · ' + this.bshort(p.balance)
+        }));
+        V.barsFirst = (th ? 'ปีที่ 1' : 'Year 1'); V.barsLast = (th ? 'ปีที่ ' : 'Year ') + ly;
+
+        V.hasTable2 = true;
+        V.table2Title = th ? 'เงินโตขึ้นปีต่อปี' : 'Year by year';
+        V.table2Heads = [
+          { label: th ? 'สิ้นปีที่' : 'End of year', align: 'left' },
+          { label: th ? 'เงินที่ใส่สะสม' : 'Contributed', align: 'right' },
+          { label: th ? 'ผลตอบแทนสะสม' : 'Return', align: 'right' },
+          { label: th ? 'มูลค่ารวม' : 'Value', align: 'right' }
+        ];
+        V.table2Rows = R.series.filter(p => p.month > 0).map(p => ({
+          label: String(Math.round(p.month / 12)),
+          cells: [
+            { text: this.b(p.contrib), weight: 400, color: '#9397ab' },
+            { text: this.b(p.gain), weight: 400, color: '#b5abfc' },
+            { text: this.b(p.balance), weight: 500, color: '#e9e9ed' }
+          ]
+        }));
+      }
+    }
+
+    /* ================= REFINANCE ================= */
+    if (s.tab === 'refi') {
+      const r = s.refi;
+      V.panelTitle = 'Refinance';
+      V.panelNote = th ? 'เทียบสัญญาเดิมที่เหลือ กับสัญญาใหม่รวมค่าธรรมเนียมย้าย' : 'Your remaining contract against a new one, fees included';
+      V.fields = [
+        this.numField('refi', 'balance', { label: th ? 'ยอดหนี้คงเหลือ' : 'Outstanding balance', unit: '฿' }),
+        this.numField('refi', 'oldRate', { label: th ? 'ดอกเบี้ยปัจจุบัน' : 'Current rate', unit: '%', plain: true }),
+        this.numField('refi', 'monthsLeft', { label: th ? 'จำนวนงวดที่เหลือ' : 'Periods remaining', unit: th ? 'งวด' : 'periods', plain: true, hint: this.dur(Math.round(r.monthsLeft)) }),
+        this.numField('refi', 'newRate', { label: th ? 'ดอกเบี้ยสัญญาใหม่' : 'New rate', unit: '%', plain: true }),
+        this.numField('refi', 'newYears', { label: th ? 'ระยะเวลาสัญญาใหม่' : 'New term', unit: th ? 'ปี' : 'years', plain: true }),
+        this.numField('refi', 'fees', { label: th ? 'ค่าธรรมเนียมในการย้าย' : 'Cost to refinance', unit: '฿', hint: th ? 'ค่าจดจำนอง ค่าประเมิน ค่าปรับปิดก่อนกำหนด' : 'Registration, valuation, prepayment penalty' }),
+        this.seg(th ? 'ค่าธรรมเนียม' : 'Fees', [
+          this.segOpt(th ? 'จ่ายสด' : 'Pay upfront', !r.rollFees, () => this.set('refi', 'rollFees', 0)),
+          this.segOpt(th ? 'รวมในวงเงิน' : 'Roll into loan', !!r.rollFees, () => this.set('refi', 'rollFees', 1))
+        ])
+      ];
+
+      if (ok) {
+        const m = this.refiModel();
+        const worth = m.netSaving > 0;
+        V.resultCaption = r.oldRate + '% → ' + r.newRate + '% · ' + this.dur(Math.round(r.monthsLeft)) + ' → ' + this.dur(Math.round(r.newYears * 12));
+        V.bigCards = [
+          { label: th ? 'ค่างวดใหม่' : 'New payment', value: this.b(m.newL.basePayment), sub: (m.monthlySave >= 0 ? (th ? 'ลดลง ' : 'down ') : (th ? 'เพิ่มขึ้น ' : 'up ')) + this.b(Math.abs(m.monthlySave)), color: '#f3f5fe' },
+          { label: th ? 'ดอกเบี้ยที่ประหยัด' : 'Interest saved', value: this.bshort(m.oldL.totalInterest - m.newL.totalInterest), sub: this.bshort(m.oldL.totalInterest) + ' → ' + this.bshort(m.newL.totalInterest), color: '#b5abfc' },
+          { label: th ? 'ประหยัดสุทธิหลังค่าธรรมเนียม' : 'Net saving after fees', value: this.bshort(m.netSaving), sub: (th ? 'ค่าธรรมเนียม ' : 'fees ') + this.b(r.fees), color: worth ? '#f3f5fe' : '#d98484' },
+          { label: th ? 'ระยะเวลาคืนทุน' : 'Payback period', value: isFinite(m.breakeven) ? this.n(m.breakeven, 1) + ' ' + L.month : '—', sub: th ? 'จากค่างวดที่ลดลง' : 'from the lower instalment', color: '#f3f5fe' }
+        ];
+        V.narrative = th
+          ? (worth
+            ? 'การย้ายสินเชื่อจาก ' + r.oldRate + '% ไป ' + r.newRate + '% ทำให้ค่างวดเปลี่ยนจาก ' + this.b(m.oldL.basePayment) + ' เป็น ' + this.b(m.newL.basePayment) + ' และประหยัดดอกเบี้ยได้ ' + this.bshort(m.oldL.totalInterest - m.newL.totalInterest) + ' เมื่อหักค่าธรรมเนียม ' + this.b(r.fees) + ' แล้วยังประหยัดสุทธิ ' + this.bshort(m.netSaving) + ' และคืนทุนค่าธรรมเนียมภายใน ' + this.n(m.breakeven, 1) + ' เดือน'
+            : 'ที่เงื่อนไขนี้ การย้ายสินเชื่อยังไม่คุ้ม เพราะดอกเบี้ยที่ประหยัดได้น้อยกว่าค่าธรรมเนียมและระยะเวลาที่ยืดออกไป ผลลัพธ์สุทธิคือจ่ายเพิ่มประมาณ ' + this.bshort(Math.abs(m.netSaving)) + ' ลองลดระยะเวลาสัญญาใหม่ หรือต่อรองค่าธรรมเนียมให้ต่ำลง')
+          : (worth
+            ? 'Moving from ' + r.oldRate + '% to ' + r.newRate + '% changes the instalment from ' + this.b(m.oldL.basePayment) + ' to ' + this.b(m.newL.basePayment) + ' and saves ' + this.bshort(m.oldL.totalInterest - m.newL.totalInterest) + ' of interest. After ' + this.b(r.fees) + ' in fees the net saving is ' + this.bshort(m.netSaving) + ', with the fees paid back in ' + this.n(m.breakeven, 1) + ' months.'
+            : 'On these terms refinancing does not pay off: the interest saved is smaller than the fees and the longer term. You would end up paying about ' + this.bshort(Math.abs(m.netSaving)) + ' more. Try a shorter new term or negotiate the fees down.');
+
+        V.hasTable2 = true;
+        V.table2Title = th ? 'สัญญาเดิมกับสัญญาใหม่' : 'Old contract vs new';
+        V.table2Verdict = worth ? (th ? 'คุ้ม — ประหยัดสุทธิ ' : 'Worth it — net saving of ') + this.bshort(m.netSaving) : (th ? 'ยังไม่คุ้มที่เงื่อนไขนี้' : 'Not worth it on these terms');
+        V.table2VerdictColor = worth ? '#b5abfc' : '#d98484';
+        V.table2Heads = [{ label: th ? 'รายการ' : 'Item', align: 'left' }, { label: th ? 'สัญญาเดิม' : 'Old', align: 'right' }, { label: th ? 'สัญญาใหม่' : 'New', align: 'right' }];
+        const row = (label, a, b) => ({ label, cells: [{ text: a, weight: 400, color: '#9397ab' }, { text: b, weight: 500, color: '#e9e9ed' }] });
+        V.table2Rows = [
+          row(th ? 'ดอกเบี้ย' : 'Rate', r.oldRate + '%', r.newRate + '%'),
+          row(th ? 'เงินต้นตั้งต้น' : 'Principal', this.b(r.balance), this.b(m.newPrincipal)),
+          row(th ? 'ค่างวดต่อเดือน' : 'Monthly payment', this.b(m.oldL.basePayment), this.b(m.newL.basePayment)),
+          row(th ? 'จำนวนงวด' : 'Periods', Math.round(r.monthsLeft) + '', m.newL.months + ''),
+          row(th ? 'ดอกเบี้ยทั้งหมด' : 'Total interest', this.b(m.oldL.totalInterest), this.b(m.newL.totalInterest)),
+          row(th ? 'จ่ายทั้งหมด (รวมค่าธรรมเนียม)' : 'Total paid (with fees)', this.b(m.oldTotal), this.b(m.newTotal))
+        ];
+        V.table2Foot = th
+          ? 'การยืดระยะเวลาออกไปทำให้ค่างวดต่ำลงแต่ดอกเบี้ยรวมอาจสูงขึ้น แม้ดอกเบี้ยต่อปีจะลดลง ลองตั้งระยะเวลาสัญญาใหม่ให้เท่ากับที่เหลืออยู่เดิมเพื่อเทียบกันตรงๆ'
+          : 'Stretching the term lowers the instalment but can raise total interest even at a lower rate. Set the new term equal to the periods remaining for a like-for-like comparison.';
+
+        V.hasBreakdown = true;
+        V.breakdownTitle = th ? 'สัญญาใหม่: เงินที่จ่ายทั้งหมดแบ่งเป็นอะไร' : 'New contract: what you pay';
+        const tot = m.newTotal;
+        V.pctA = (r.balance / tot * 100).toFixed(2);
+        V.pctB = (m.newL.totalInterest / tot * 100).toFixed(2);
+        V.pctC = (r.fees / tot * 100).toFixed(2);
+        V.pctAText = this.n(r.balance / tot * 100, 0) + '%';
+        V.pctBText = this.n(m.newL.totalInterest / tot * 100, 0) + '%';
+        V.legend = [
+          { color: '#b2b6ca', label: th ? 'เงินต้น' : 'Principal', value: this.bshort(r.balance) },
+          { color: '#9184d9', label: th ? 'ดอกเบี้ย' : 'Interest', value: this.bshort(m.newL.totalInterest) },
+          { color: '#595d6c', label: th ? 'ค่าธรรมเนียม' : 'Fees', value: this.bshort(r.fees) }
+        ];
+
+        V.hasCharts = true;
+        const ye = [m.newPrincipal].concat(m.newL.rows.filter(x => x.m % 12 === 0).map(x => x.balance));
+        const cur = this.curveFrom(ye);
+        V.curveTitle = th ? 'ยอดหนี้คงเหลือ (สัญญาใหม่)' : 'Remaining balance (new contract)';
+        V.curveNote = th ? 'สิ้นปีที่เท่าไร เหลือหนี้เท่าไร' : 'What is left at the end of each year';
+        V.curveArea = cur.d; V.curvePoints = cur.poly;
+        const ly = Math.ceil(m.newL.months / 12);
+        V.curveTicks = [0, 1, 2, 3, 4].map(i => (th ? 'ปี ' : 'Y') + Math.round(i * ly / 4));
+        V.curveMarks = [1, 5, 10, ly].filter((y, i, arr) => arr.indexOf(y) === i && y <= ly).map(y => {
+          const rr = m.newL.rows.filter(x => x.m <= y * 12).pop();
+          return { label: (th ? 'สิ้นปีที่ ' : 'End of year ') + y, value: this.bshort(rr ? rr.balance : m.newPrincipal) };
+        });
+        V.barsTitle = th ? 'เงินต้นกับดอกเบี้ยในแต่ละปี' : 'Principal vs interest by year';
+        V.barsNote = th ? 'สัญญาใหม่ · แถบสีม่วงคือดอกเบี้ย' : 'New contract · purple is interest';
+        V.yearBars = this.bars(m.newL.rows, 'principal', 'interest');
+        V.barsFirst = (th ? 'ปีที่ 1' : 'Year 1'); V.barsLast = (th ? 'ปีที่ ' : 'Year ') + ly;
+
+        V.hasAmort = true;
+        V.amortTitle = th ? 'ตารางผ่อนชำระ (สัญญาใหม่)' : 'Amortization schedule (new contract)';
+        V.amortNote = th ? 'ทุกงวดแยกเงินต้น ดอกเบี้ย และยอดคงเหลือ' : 'Principal, interest and balance for every period';
+        this.fillAmort(V, m.newL.rows, 'refinance');
+      }
+    }
+
+    /* ================= AFFORDABILITY ================= */
+    if (s.tab === 'afford') {
+      const a = s.afford;
+      V.panelTitle = th ? 'กู้ได้เท่าไร' : 'How much can I borrow';
+      V.panelNote = th ? 'ประมาณจากสัดส่วนภาระหนี้ต่อรายได้ ไม่ใช่การอนุมัติจากธนาคาร' : 'Estimated from a debt-service ratio — not a bank approval';
+      V.fields = [
+        this.numField('afford', 'income', { label: th ? 'รายได้ต่อเดือน' : 'Monthly income', unit: '฿' }),
+        this.numField('afford', 'expense', { label: th ? 'ค่าใช้จ่ายต่อเดือน' : 'Monthly expenses', unit: '฿' }),
+        this.numField('afford', 'otherDebt', { label: th ? 'ภาระหนี้อื่นต่อเดือน' : 'Other debt payments', unit: '฿' }),
+        this.numField('afford', 'dsr', { label: th ? 'สัดส่วนภาระหนี้ต่อรายได้ (DSR)' : 'Debt-service ratio', unit: '%', plain: true, hint: th ? 'ธนาคารส่วนใหญ่ใช้ 30–50%' : 'Most lenders use 30–50%' }),
+        this.numField('afford', 'down', { label: th ? 'เงินดาวน์ที่มี' : 'Down payment available', unit: '฿' }),
+        this.numField('afford', 'rate', { label: th ? 'อัตราดอกเบี้ยที่คาด' : 'Expected rate', unit: '%', plain: true }),
+        this.numField('afford', 'years', { label: th ? 'ระยะเวลากู้' : 'Term', unit: th ? 'ปี' : 'years', plain: true })
+      ];
+
+      if (ok) {
+        const m = this.affordModel();
+        const sched = [{ months: Math.round(a.years * 12), annual: a.rate }];
+        const loanRun = ENGINE.amortize({ principal: m.maxLoan, months: Math.round(a.years * 12), sched });
+        V.resultCaption = (th ? 'DSR ' : 'DSR ') + a.dsr + '% · ' + a.rate + '% · ' + this.dur(Math.round(a.years * 12));
+        V.bigCards = [
+          { label: th ? 'ผ่อนได้สูงสุดต่อเดือน' : 'Maximum instalment', value: this.b(m.maxPay), sub: m.limitedBy === 'dsr' ? (th ? 'ถูกจำกัดด้วย DSR' : 'limited by DSR') : (th ? 'ถูกจำกัดด้วยเงินเหลือ' : 'limited by cash left'), color: '#f3f5fe' },
+          { label: th ? 'วงเงินกู้ประมาณ' : 'Estimated loan', value: this.bshort(m.maxLoan), sub: a.rate + '% · ' + Math.round(a.years) + ' ' + L.years, color: '#f3f5fe' },
+          { label: th ? 'ราคาสินทรัพย์ที่ไหว' : 'Property price', value: this.bshort(m.price), sub: (th ? 'รวมเงินดาวน์ ' : 'including ') + this.bshort(a.down), color: '#f3f5fe' },
+          { label: th ? 'ดอกเบี้ยทั้งหมดที่จะจ่าย' : 'Interest over the term', value: this.bshort(loanRun.totalInterest), sub: th ? 'ถ้ากู้เต็มวงเงินนี้' : 'if you borrow the full amount', color: '#b5abfc' }
+        ];
+        V.narrative = th
+          ? 'จากรายได้ ' + this.b(a.income) + ' ต่อเดือน หักค่าใช้จ่ายและหนี้เดิมแล้ว คุณผ่อนได้ประมาณ ' + this.b(m.maxPay) + ' ต่อเดือน ซึ่งที่ดอกเบี้ย ' + a.rate + '% เป็นเวลา ' + Math.round(a.years) + ' ปี คิดเป็นวงเงินกู้ราว ' + this.bshort(m.maxLoan) + ' และเมื่อรวมเงินดาวน์ที่มี ' + this.bshort(a.down) + ' จะซื้อสินทรัพย์ได้ราว ' + this.bshort(m.price) + ' ตัวเลขนี้เป็นการประมาณการ ไม่ใช่การอนุมัติสินเชื่อจากธนาคาร'
+          : 'On ' + this.b(a.income) + ' a month, after expenses and existing debt, you could service about ' + this.b(m.maxPay) + ' a month. At ' + a.rate + '% over ' + Math.round(a.years) + ' years that is roughly ' + this.bshort(m.maxLoan) + ' of borrowing, and with your ' + this.bshort(a.down) + ' down payment, a property of about ' + this.bshort(m.price) + '. This is an estimate, not a credit approval.';
+
+        V.hasTable2 = true;
+        V.table2Title = th ? 'ที่มาของตัวเลข' : 'How the number is reached';
+        V.table2Heads = [{ label: th ? 'รายการ' : 'Item', align: 'left' }, { label: th ? 'จำนวน' : 'Amount', align: 'right' }];
+        const one = (label, v, muted) => ({ label, cells: [{ text: v, weight: muted ? 400 : 500, color: muted ? '#9397ab' : '#e9e9ed' }] });
+        V.table2Rows = [
+          one(th ? 'รายได้ต่อเดือน' : 'Monthly income', this.b(a.income), true),
+          one(th ? 'เพดานตาม DSR ' + a.dsr + '% หักหนี้เดิม' : 'Ceiling at ' + a.dsr + '% DSR, less existing debt', this.b(Math.max(0, m.byDsr)), true),
+          one(th ? 'เงินเหลือหลังค่าใช้จ่ายและหนี้เดิม' : 'Cash left after expenses and debt', this.b(Math.max(0, m.byCash)), true),
+          one(th ? 'ผ่อนได้สูงสุด (ค่าที่น้อยกว่า)' : 'Maximum instalment (the lower of the two)', this.b(m.maxPay)),
+          one(th ? 'วงเงินกู้ที่ค่างวดนี้รองรับ' : 'Loan that instalment supports', this.b(m.maxLoan)),
+          one(th ? 'ราคาสินทรัพย์รวมเงินดาวน์' : 'Price including down payment', this.b(m.price))
+        ];
+        V.table2Foot = th
+          ? 'การอนุมัติจริงยังพิจารณาประวัติเครดิต ความมั่นคงของรายได้ อายุผู้กู้ และมูลค่าประเมินหลักประกัน ตัวเลขนี้ใช้เพื่อวางแผนเบื้องต้นเท่านั้น'
+          : 'Real approval also weighs credit history, income stability, the borrower’s age and the appraised value of the collateral. Use this for planning only.';
+
+        if (m.maxLoan > 0) {
+          V.hasCharts = true;
+          const ye = [m.maxLoan].concat(loanRun.rows.filter(x => x.m % 12 === 0).map(x => x.balance));
+          const cur = this.curveFrom(ye);
+          V.curveTitle = th ? 'ถ้ากู้เต็มวงเงิน: ยอดหนี้คงเหลือ' : 'If you borrow it all: remaining balance';
+          V.curveNote = th ? 'สิ้นปีที่เท่าไร เหลือหนี้เท่าไร' : 'What is left at the end of each year';
+          V.curveArea = cur.d; V.curvePoints = cur.poly;
+          const ly = Math.ceil(loanRun.months / 12);
+          V.curveTicks = [0, 1, 2, 3, 4].map(i => (th ? 'ปี ' : 'Y') + Math.round(i * ly / 4));
+          V.curveMarks = [1, 5, 10, ly].filter((y, i, arr) => arr.indexOf(y) === i && y <= ly).map(y => {
+            const rr = loanRun.rows.filter(x => x.m <= y * 12).pop();
+            return { label: (th ? 'สิ้นปีที่ ' : 'End of year ') + y, value: this.bshort(rr ? rr.balance : m.maxLoan) };
+          });
+          V.barsTitle = th ? 'เงินต้นกับดอกเบี้ยในแต่ละปี' : 'Principal vs interest by year';
+          V.barsNote = th ? 'แถบสีม่วงคือดอกเบี้ย' : 'Purple is interest';
+          V.yearBars = this.bars(loanRun.rows, 'principal', 'interest');
+          V.barsFirst = (th ? 'ปีที่ 1' : 'Year 1'); V.barsLast = (th ? 'ปีที่ ' : 'Year ') + ly;
+        }
+      }
+    }
+
+    if (!ok) {
+      V.bigCards = []; V.narrative = ''; V.resultCaption = '';
+      V.fields = V.fields || [];
+    }
+    return V;
+  }
+
+  /* Shared amortization table model — yearly roll-up or every period. */
+  fillAmort(V, rows, csvName) {
+    const th = this.state.lang === 'th', L = this.L;
+    V.amortHeads = [
+      { label: this.state.amortView === 'year' ? L.thYear : L.thPeriod, align: 'left' },
+      { label: L.thWhen, align: 'left' },
+      { label: L.thPay, align: 'right' },
+      { label: L.thPrin, align: 'right' },
+      { label: L.thInt, align: 'right' },
+      { label: L.thBal, align: 'right' }
+    ];
+    V.onCsv = () => this.csv(rows, csvName);
+    if (this.state.amortView === 'month') {
+      V.amortRows = rows.map(r => ({
+        n: String(r.m), weight: 400,
+        date: (th ? 'ปีที่ ' : 'Y') + Math.ceil(r.m / 12) + ' · ' + (th ? 'เดือน ' : 'M') + (((r.m - 1) % 12) + 1),
+        pay: this.n(r.payment, 0), principal: this.n(r.principal, 0), interest: this.n(r.interest, 0), balance: this.n(r.balance, 0)
+      }));
+    } else {
+      const per = [];
+      rows.forEach(r => {
+        const y = Math.ceil(r.m / 12);
+        if (!per[y]) per[y] = { pay: 0, p: 0, i: 0, bal: 0, from: r.m, to: r.m };
+        per[y].pay += r.payment; per[y].p += r.principal; per[y].i += r.interest;
+        per[y].bal = r.balance; per[y].to = r.m;
+      });
+      V.amortRows = per.filter(Boolean).map((p, idx) => ({
+        n: String(idx + 1), weight: 500,
+        date: (th ? 'งวด ' : 'periods ') + p.from + '–' + p.to,
+        pay: this.n(p.pay, 0), principal: this.n(p.p, 0), interest: this.n(p.i, 0), balance: this.n(p.bal, 0)
+      }));
+    }
+  }
+}
+</script>
+</body>
+</html>
